@@ -1,0 +1,23 @@
+{
+  "name": "salary-management-",
+  "version": "1.0.0",
+  "description": "Build a high-performance, web-based employee salary management system for ACME organization (10,000 employees) to replace tedious Excel workflows, allowing HR managers to seamlessly manage salary data and run analytics on compensation distribution across multiple countries and departments.",
+  "main": "server.js",
+  "scripts": {
+    "test": "node --test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://localhost:26831/mavani-nikunj/salary-management-"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "supertest": "^7.3.0"
+  }
+}

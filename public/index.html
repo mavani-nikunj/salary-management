@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ACME Salary Management</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 20px; background: #f4f6fb; color: #1f2937; }
+      h1, h2 { margin: 0 0 10px; }
+      .card { background: white; padding: 16px; border-radius: 8px; margin-bottom: 16px; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th, td { border-bottom: 1px solid #e5e7eb; padding: 8px; text-align: left; }
+      input, select, button { padding: 8px; margin-right: 8px; margin-bottom: 8px; }
+    </style>
+  </head>
+  <body>
+    <h1>ACME Employee Salary Management</h1>
+
+    <div class="card">
+      <h2>Employee Filters</h2>
+      <input id="search" placeholder="Search by name" />
+      <input id="country" placeholder="Country code (e.g. US)" />
+      <input id="department" placeholder="Department" />
+      <button onclick="loadEmployees()">Apply</button>
+      <span id="employeeCount"></span>
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Name</th><th>Country</th><th>Department</th><th>Salary</th></tr>
+        </thead>
+        <tbody id="employeeRows"></tbody>
+      </table>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Distribution by Country</h2>
+        <table>
+          <thead><tr><th>Country</th><th>Employees</th><th>Average Salary</th></tr></thead>
+          <tbody id="countryRows"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h2>Distribution by Department</h2>
+        <table>
+          <thead><tr><th>Department</th><th>Employees</th><th>Average Salary</th></tr></thead>
+          <tbody id="departmentRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Add Employee</h2>
+      <input id="newName" placeholder="Name" />
+      <input id="newCountry" placeholder="Country" />
+      <input id="newDepartment" placeholder="Department" />
+      <input id="newSalary" type="number" placeholder="Salary" />
+      <button onclick="addEmployee()">Add</button>
+      <span id="formStatus"></span>
+    </div>
+
+    <script>
+      const formatMoney = (value) => Number(value).toLocaleString(undefined, { maximumFractionDigits: 2 });
+
+      async function loadEmployees() {
+        const query = new URLSearchParams({
+          search: document.getElementById('search').value,
+          country: document.getElementById('country').value,
+          department: document.getElementById('department').value,
+          limit: 100
+        });
+
+        const response = await fetch(`/api/employees?${query.toString()}`);
+        const body = await response.json();
+
+        document.getElementById('employeeCount').textContent = `${body.total} employees matched`;
+        document.getElementById('employeeRows').innerHTML = body.data
+          .map((e) => `<tr><td>${e.id}</td><td>${e.name}</td><td>${e.country}</td><td>${e.department}</td><td>${formatMoney(e.salary)}</td></tr>`)
+          .join('');
+      }
+
+      async function loadAnalytics() {
+        const response = await fetch('/api/analytics/distribution');
+        const body = await response.json();
+
+        document.getElementById('countryRows').innerHTML = body.byCountry
+          .map((i) => `<tr><td>${i.country}</td><td>${i.count}</td><td>${formatMoney(i.averageSalary)}</td></tr>`)
+          .join('');
+
+        document.getElementById('departmentRows').innerHTML = body.byDepartment
+          .map((i) => `<tr><td>${i.department}</td><td>${i.count}</td><td>${formatMoney(i.averageSalary)}</td></tr>`)
+          .join('');
+      }
+
+      async function addEmployee() {
+        const payload = {
+          name: document.getElementById('newName').value,
+          country: document.getElementById('newCountry').value,
+          department: document.getElementById('newDepartment').value,
+          salary: Number(document.getElementById('newSalary').value)
+        };
+
+        const response = await fetch('/api/employees', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        document.getElementById('formStatus').textContent = response.ok ? 'Employee added' : 'Invalid employee input';
+        if (response.ok) {
+          await loadEmployees();
+          await loadAnalytics();
+        }
+      }
+
+      loadEmployees();
+      loadAnalytics();
+    </script>
+  </body>
+</html>
