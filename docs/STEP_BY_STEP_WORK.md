@@ -32,11 +32,21 @@
 - [x] Current user profile (`GET /api/auth/me`) & password change (`POST /api/auth/change-password`)
 - [x] Auth middleware (`protect`, `authorize`) extracting `req.orgId` & `req.userRole`
 
-### Step 4: Core CRUD APIs
+### Step 4: Core CRUD APIs & Email Integration
 
+- [x] Employee CRUD (`/api/employees`):
+  - Multi-faceted filters: `search`, `departmentId`/`department`, `countryId`/`countryCode`, `currencyId`/`currencyCode`, `role`, `level`, `employmentType`, `status`, `minSalary`/`maxSalary`, `hireDateFrom`/`hireDateTo`, `leaveDateFrom`/`leaveDateTo`, `hasLeft`
+  - Sorting (`sortBy`, `sortOrder`) & pagination (`page`, `limit`)
+  - Single employee lookup with paginated salary history (`GET /api/employees/:id?salaryPage=1&salaryLimit=10`)
+  - Auto-created initial `Salary` record upon creation
+  - Automated salary revision ledger logging upon salary change
+  - Soft deactivation (`status = Inactive`) and permanent deletion (`?permanent=true`)
+- [x] Email Dispatch & PDF Salary Slip integration:
+  - Automated welcome onboarding email upon employee registration
+  - Custom email dispatch endpoint (`POST /api/employees/:id/send-email`)
+  - Official Salary Slip PDF generation (PDFKit) and attachment dispatch (`salaryId` selection)
 - [ ] Department routes (create, list, update, delete)
-- [ ] Employee routes (create, list with filters/pagination, update, toggle status)
-- [ ] Salary history routes (add increment, view timeline)
+- [ ] Salary history routes (standalone salary timeline endpoints)
 - [ ] Country & Currency master data routes
 
 ### Step 5: Excel Bulk Import / Export

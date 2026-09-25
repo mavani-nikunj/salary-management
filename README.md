@@ -86,7 +86,7 @@ npm run seed
 - [x] **Step 1**: Core Database Models & Modular Swagger Setup
 - [x] **Step 2**: Database Seeders, Live Currency Cron & 10k Records Initial Data
 - [x] **Step 3**: Multi-Tenant JWT Auth Middleware & Scoping (Login, Forgot/Reset Password, Staged Registration)
-- [ ] **Step 4**: Core CRUD APIs (Departments, Employees, Salary Revisions)
+- [x] **Step 4**: Core Employee CRUD, Multi-Faceted Filters, Paginated Salary Ledger & PDF Salary Slip Email Dispatch
 - [ ] **Step 5**: High-Volume Bulk Excel Upload & Export (`bulkWrite`)
 - [ ] **Step 6**: Compensation Analytics & Aggregation Engine
 - [ ] **Step 7**: Frontend Management Web Application

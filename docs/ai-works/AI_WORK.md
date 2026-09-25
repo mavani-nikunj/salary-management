@@ -34,11 +34,16 @@
 - [x] Forgot/reset password endpoints (`/api/auth/forgot-password`, `/api/auth/reset-password`).
 - [x] Profile & change password endpoints (`/api/auth/me`, `/api/auth/change-password`).
 
-### Step 3: CRUD Controllers & Routes
+### Step 3: CRUD Controllers, Routes & Email Dispatch
 
+- [x] **Employees**:
+  - Full CRUD with 12+ filters (`search`, `departmentId`/`department`, `countryId`/`countryCode`, `currencyId`/`currencyCode`, `role`, `level`, `employmentType`, `status`, salary ranges, hire/leave date ranges).
+  - Auto-creates initial salary record on creation.
+  - Automatically logs new salary revision history on salary update.
+  - Soft delete (status `"Inactive"`) and permanent delete options.
+  - Welcome onboarding email + custom email dispatch (`/api/employees/:id/send-email`).
 - **Departments**: Create, list, edit, delete (scoped to `orgId`, unique name check).
-- **Employees**: Create (auto-create first salary record), list with search/filter, update, deactivate.
-- **Salaries**: Add new salary revision for employee, list chronological history.
+- **Salaries**: Standalone salary revision timeline APIs.
 
 ### Step 4: Excel Bulk Import / Export
 

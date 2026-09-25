@@ -25,23 +25,31 @@ const createTransporter = () => {
   });
 };
 
-interface EmailOptions {
+export interface EmailAttachment {
+  filename: string;
+  content: Buffer | string;
+  contentType?: string;
+}
+
+export interface EmailOptions {
   to: string;
   subject: string;
   text?: string;
   html?: string;
+  attachments?: EmailAttachment[];
 }
 
 export const sendEmail = async (options: EmailOptions): Promise<void> => {
   try {
     const transporter = createTransporter();
 
-    const mailOptions = {
+    const mailOptions: nodemailer.SendMailOptions = {
       from: process.env.SMTP_FROM || process.env.SMTP_USER,
       to: options.to,
       subject: options.subject,
       text: options.text,
       html: options.html,
+      attachments: options.attachments,
     };
 
     const info = await transporter.sendMail(mailOptions);
