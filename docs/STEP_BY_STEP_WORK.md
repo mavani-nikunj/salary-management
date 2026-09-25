@@ -87,8 +87,28 @@
 
 ### Step 7: Frontend Web App
 
-- [ ] Login screen for organization
+- [x] Login screen for organization / HR (`/`):
+  - Modern, dark-themed responsive UI with HeroUI & Lucide icons
+  - Password visibility toggle and loading state handling
+  - Quick-fill credential chips for Organization (`nickdev@yopmail.com`) and HR Manager (`hr-nick-dev@yopmail.com`)
+  - Explicit constraint enforced: No registration links or register API
+- [x] Proxy & Route Protection Guard:
+  - Next.js 16 `src/proxy.ts` (middleware) route guard
+  - Unauthenticated visitors restricted strictly to auth routes (`/`, `/forgot-password`, `/reset-password`), with all protected routes redirecting to `/?callbackUrl=...`
+  - Authenticated visitors visiting `/` automatically redirect to `/dashboard`
+  - Backend API proxy rewrite configured in `next.config.ts` mapping `/api/proxy/:path*` to `http://localhost:5022/api/:path*`
+- [x] NextAuth Session Integration (`src/services/api.ts`):
+  - CredentialsProvider wired to backend `POST /api/auth/login`
+  - JWT & Session callbacks pass through `token`, `role`, `orgId`, and full user profile
+- [x] Password Recovery Flow (`/forgot-password` & `/reset-password`):
+  - "Forgot password?" navigation link on Login page
+  - Request reset instructions form (`/forgot-password`) calling backend `POST /api/auth/forgot-password`
+  - 1-click test account fill buttons (`nickdev@yopmail.com` and `hr-nick-dev@yopmail.com`)
+  - Development mode instant redirect helper displaying generated `resetToken`
+  - Set new password page (`/reset-password`) with token validation, dual password matching, visibility toggles, and direct redirect to sign-in
+  - Server actions `CallForgotPassword`, `CallResetPassword`, and `CallChangePassword` in `auth.action.ts`
 - [ ] Employee management table (filters, search, pagination)
 - [ ] Salary history modal & revision form
 - [ ] Analytics dashboard with charts
-- [ ] Excel upload/download buttons
+- [ ] Excel download buttons
+
