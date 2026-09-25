@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import "dotenv/config";
 import cluster from "cluster";
 import os from "os";
 import app from "@/app";
@@ -7,10 +7,7 @@ import { connectDB } from "@/config/db";
 import { verifySMTP } from "@/utils/mailer";
 import { seedDatabase } from "@/config/seeder";
 
-// Load environment variables
-dotenv.config();
-
-const PORT = process.env.PORT || 5022;
+const PORT = process.env.PORT;
 const numCPUs = os.cpus().length;
 
 const isDev = process.env.NODE_ENV !== "production";
