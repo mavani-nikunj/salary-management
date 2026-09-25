@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "@/utils/jwt";
-import User, { IUser } from "@/models/user.model";
+import { Employee, IEmployee, Organization, IOrganization } from "@/models";
 
 export interface AuthRequest extends Request {
-  user?: IUser;
+  user?: IEmployee | IOrganization | any;
   userRole?: string;
+  orgId?: any;
 }
 
 export const protect = async (
@@ -22,9 +23,13 @@ export const protect = async (
       token = req.headers.authorization.split(" ")[1];
       const decoded: any = verifyToken(token);
 
-      const user = await User.findById(decoded.id)
-        .select("-password")
-        .populate("role");
+      let user: any = await Employee.findById(decoded.id).select("-passwordHash");
+      let role = user?.role || "Employee";
+
+      if (!user) {
+        user = await Organization.findById(decoded.id).select("-passwordHash");
+        role = "Organization";
+      }
 
       if (!user) {
         res
@@ -33,9 +38,9 @@ export const protect = async (
         return;
       }
 
-      const roleObj: any = user.role;
       req.user = user;
-      req.userRole = roleObj?.name || "User";
+      req.userRole = role;
+      req.orgId = user.orgId || user._id;
 
       next();
     } catch (error) {

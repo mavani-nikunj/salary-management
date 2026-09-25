@@ -16,5 +16,3 @@ export { default as Employee } from "./employee.model";
 export * from "./salary.model";
 export { default as Salary } from "./salary.model";
 
-export * from "./user.model";
-export { default as User } from "./user.model";

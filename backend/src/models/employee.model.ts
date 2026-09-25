@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
+export type EmployeeRole = "HR" | "Employee";
 export type EmployeeLevel = "junior" | "mid" | "senior" | "lead" | "manager";
 export type EmploymentType = "Full-time" | "Part-time" | "Contract";
 export type EmployeeStatus = "Active" | "Inactive";
@@ -11,6 +12,7 @@ export interface IEmployee extends Document {
   email: string;
   jobTitle: string;
   departmentId: Types.ObjectId;
+  role: EmployeeRole;
   level: EmployeeLevel;
   countryId: Types.ObjectId;
   currencyId: Types.ObjectId;
@@ -59,9 +61,19 @@ const EmployeeSchema: Schema<IEmployee> = new Schema(
       ref: "Department",
       required: [true, "Department reference is required"],
     },
+    role: {
+      type: String,
+      required: [true, "Employee role is required"],
+      enum: {
+        values: ["HR", "Employee"],
+        message: "{VALUE} is not a valid role",
+      },
+      default: "Employee",
+    },
     level: {
       type: String,
       required: [true, "Employee level is required"],
+      lowercase: true,
       enum: {
         values: ["junior", "mid", "senior", "lead", "manager"],
         message: "{VALUE} is not a valid level",

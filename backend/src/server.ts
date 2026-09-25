@@ -6,6 +6,7 @@ import app from "@/app";
 import { connectDB } from "@/config/db";
 import { verifySMTP } from "@/utils/mailer";
 import { seedDatabase } from "@/config/seeder";
+import { initCurrencyCron } from "@/cron";
 
 const PORT = process.env.PORT;
 const numCPUs = os.cpus().length;
@@ -49,6 +50,7 @@ if (!isDev && cluster.isPrimary) {
             process.pid
           } running on http://localhost:${PORT}`,
         );
+        initCurrencyCron();
       });
     });
 }
