@@ -7,6 +7,8 @@ export interface IOrganization extends Document {
   email: string;
   passwordHash: string;
   status: OrganizationStatus;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -37,6 +39,14 @@ const OrganizationSchema: Schema<IOrganization> = new Schema(
         message: "{VALUE} is not a valid status",
       },
       default: "Active",
+    },
+    resetPasswordToken: {
+      type: String,
+      required: false,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      required: false,
     },
   },
   {

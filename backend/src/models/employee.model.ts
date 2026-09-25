@@ -23,6 +23,8 @@ export interface IEmployee extends Document {
   status: EmployeeStatus;
   orgId: Types.ObjectId;
   passwordHash?: string;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -126,6 +128,14 @@ const EmployeeSchema: Schema<IEmployee> = new Schema(
     },
     passwordHash: {
       type: String,
+      required: false,
+    },
+    resetPasswordToken: {
+      type: String,
+      required: false,
+    },
+    resetPasswordExpires: {
+      type: Date,
       required: false,
     },
   },

@@ -23,10 +23,14 @@
 - [x] 10,000 employees seeded from `seeds/employees.json` with batch-created initial Salary records
 - [x] Seeder runner script: `npm run seed`
 
-### Step 3: Auth & Multi-Tenancy Scoping
+### Step 3: Auth & Multi-Tenancy Scoping (Done)
 
-- [ ] Organization login & register with JWT
-- [ ] Auth middleware to extract `orgId` from token and scope all queries
+- [x] Login endpoint (`POST /api/auth/login`) supporting both Organization and HR/Employee accounts
+- [x] JWT token issuing with `id`, `email`, `role`, and multi-tenant `orgId`
+- [x] Staged registration endpoints for future use (`POST /api/auth/register-org`, `POST /api/auth/register-hr`) with self-registration guard
+- [x] Forgot password (`POST /api/auth/forgot-password`) & Reset password (`POST /api/auth/reset-password`) with secure token expiration
+- [x] Current user profile (`GET /api/auth/me`) & password change (`POST /api/auth/change-password`)
+- [x] Auth middleware (`protect`, `authorize`) extracting `req.orgId` & `req.userRole`
 
 ### Step 4: Core CRUD APIs
 

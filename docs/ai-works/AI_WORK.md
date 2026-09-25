@@ -25,10 +25,14 @@
 - [x] Automated day start 12:00 AM UTC (`0 0 * * *`) cron job to re-sync `exRate` from CDN daily.
 - [x] Standalone command: `npm run seed`.
 
-### Step 2: Auth Middleware & Scoping
+### Step 2: Auth Middleware & Scoping (Done)
 
-- Verify JWT token and attach `req.orgId` & `req.userRole`.
-- Block any unauthorized requests or requests without valid `orgId`.
+- [x] Login (`/api/auth/login`) handles both Organization & HR accounts.
+- [x] JWT token carries `id`, `email`, `role`, and `orgId`.
+- [x] Auth middleware (`protect`, `authorize`) attaches `req.user`, `req.userRole`, and `req.orgId`.
+- [x] Self-registration endpoints (`/api/auth/register-org`, `/api/auth/register-hr`) staged for future use with guard.
+- [x] Forgot/reset password endpoints (`/api/auth/forgot-password`, `/api/auth/reset-password`).
+- [x] Profile & change password endpoints (`/api/auth/me`, `/api/auth/change-password`).
 
 ### Step 3: CRUD Controllers & Routes
 
