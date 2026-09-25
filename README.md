@@ -1,2 +1,89 @@
-# salary-management-
-Build a high-performance, web-based employee salary management system for ACME organization (10,000 employees) to replace tedious Excel workflows, allowing HR managers to seamlessly manage salary data and run analytics on compensation distribution across multiple countries and departments.
+# ACME Salary Management System
+
+A high-performance, web-based employee salary management system built for **ACME Organization** (10,000+ employees) to replace tedious spreadsheet/Excel workflows. Enables HR managers to manage multi-country, multi-currency compensation, maintain revision ledgers, and execute real-time analytics.
+
+---
+
+## Tech Stack
+
+- **Backend**: Node.js, Express 5, TypeScript (Strict Mode)
+- **Database & ORM**: MongoDB, Mongoose 9
+- **API Documentation**: Swagger / OpenAPI 3.0 (`swagger-jsdoc`, `swagger-ui-express`)
+- **Authentication**: JWT, bcryptjs
+
+---
+
+## Current Progress & Completed Setup
+
+### 1. Database Models (`backend/src/models/`)
+
+All core entities and multi-tenant compound unique indexes are configured:
+
+| Model            | Collection      | Key Fields & Indexes                                                           |
+| :--------------- | :-------------- | :----------------------------------------------------------------------------- |
+| **Organization** | `organizations` | Root tenant entity, status enum (`Active`, `Inactive`), unique `email`         |
+| **Country**      | `countries`     | Master registry, unique `name`, unique `code`                                  |
+| **Currency**     | `currencies`    | Linked to Country, `exRate` (min 0.0001), compound unique: `[countryId, code]` |
+| **Department**   | `departments`   | Scoped to Org, compound unique: `[orgId, name]`                                |
+| **Employee**     | `employees`     | Scoped to Org, compound unique: `[orgId, employeeCode]`, role (`HR`, `Employee`), level & type enums |
+| **Salary**       | `salaries`      | Scoped to Employee, compound unique: `[employeeId, effectiveDate]`             |
+
+### 2. Modular Swagger Documentation (`backend/src/swagger/`)
+
+- **Swagger UI**: [`http://localhost:5022/api-docs`](http://localhost:5022/api-docs)
+- **Raw JSON Spec**: [`http://localhost:5022/api-docs.json`](http://localhost:5022/api-docs.json)
+- Modular schema definitions pre-loaded under OpenAPI components for all models.
+
+### 3. Project Documentation
+
+- [docs/STEP_BY_STEP_WORK.md](file:///c:/Users/dobob/OneDrive/Desktop/P/salary-management-/docs/STEP_BY_STEP_WORK.md): Concise 7-step implementation checklist.
+- [docs/ai-works/AI_WORK.md](file:///c:/Users/dobob/OneDrive/Desktop/P/salary-management-/docs/ai-works/AI_WORK.md): Operational rules and task steps for AI development.
+
+---
+
+## Getting Started
+
+### 1. Environment Configuration
+
+Ensure your `backend/.env` file is set up:
+
+```env
+PORT=5022
+NODE_ENV=development
+DB_URL="mongodb://localhost:27017/salary-management"
+JWT_SECRET="your-jwt-secret"
+```
+
+### 2. Run Backend Locally
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+### 3. Database Seeding & Cron Job
+Populate 245 countries, live currencies, default organization, departments, default HR user, and 10,000 employees:
+```bash
+npm run seed
+```
+- **Currency Cron**: Daily at 12:00 PM UTC (`0 12 * * *`), automatically syncs exchange rates against INR from CDN.
+- **Default Org**: "Nick Dev" (`nickdev@yopmail.com` / `Admin@123`)
+- **Default HR**: `HR_001` (`hr-nick-dev@yopmail.com` / `Admin@123`, role: `HR`)
+
+### 4. Verify Endpoints
+
+- **Health Check**: `GET http://localhost:5022/health`
+- **API Documentation**: `GET http://localhost:5022/api-docs`
+
+---
+
+## Implementation Roadmap
+
+- [x] **Step 1**: Core Database Models & Modular Swagger Setup
+- [x] **Step 2**: Database Seeders, Live Currency Cron & 10k Records Initial Data
+- [ ] **Step 3**: Multi-Tenant JWT Auth Middleware & Scoping
+- [ ] **Step 4**: Core CRUD APIs (Departments, Employees, Salary Revisions)
+- [ ] **Step 5**: High-Volume Bulk Excel Upload & Export (`bulkWrite`)
+- [ ] **Step 6**: Compensation Analytics & Aggregation Engine
+- [ ] **Step 7**: Frontend Management Web Application

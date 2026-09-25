@@ -10,6 +10,11 @@ export const employeeSchemas = {
       email: { type: "string", format: "email", example: "jane.doe@acme.com" },
       jobTitle: { type: "string", example: "Lead Software Engineer" },
       departmentId: { type: "string", example: "64e0a1f8b1c2d3e4f5a6b7f1" },
+      role: {
+        type: "string",
+        enum: ["HR", "Employee"],
+        example: "Employee",
+      },
       level: {
         type: "string",
         enum: ["junior", "mid", "senior", "lead", "manager"],
@@ -53,6 +58,12 @@ export const employeeSchemas = {
       email: { type: "string", format: "email", example: "jane.doe@acme.com" },
       jobTitle: { type: "string", example: "Lead Software Engineer" },
       departmentId: { type: "string", example: "64e0a1f8b1c2d3e4f5a6b7f1" },
+      role: {
+        type: "string",
+        enum: ["HR", "Employee"],
+        default: "Employee",
+        example: "Employee",
+      },
       level: {
         type: "string",
         enum: ["junior", "mid", "senior", "lead", "manager"],
