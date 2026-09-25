@@ -34,36 +34,29 @@
 - [x] Forgot/reset password endpoints (`/api/auth/forgot-password`, `/api/auth/reset-password`).
 - [x] Profile & change password endpoints (`/api/auth/me`, `/api/auth/change-password`).
 
-### Step 3: CRUD Controllers, Routes & PDF/Email Dispatch (Done)
+### Step 3: CRUD Controllers, Routes & Email Dispatch
 
-- [x] **Employees** (`/api/employees`):
+- [x] **Employees**:
   - Full CRUD with 12+ filters (`search`, `departmentId`/`department`, `countryId`/`countryCode`, `currencyId`/`currencyCode`, `role`, `level`, `employmentType`, `status`, salary ranges, hire/leave date ranges).
-  - Single employee lookup with paginated salary history (`salaryPage`, `salaryLimit`).
-  - Auto-creates initial salary record on creation and logs revisions on salary updates.
+  - Auto-creates initial salary record on creation.
+  - Automatically logs new salary revision history on salary update.
   - Soft delete (status `"Inactive"`) and permanent delete options.
-  - Welcome onboarding email + custom email dispatch (`/api/employees/:id/send-email`) with automatic salary slip PDF attachment.
-- [x] **Salaries** (`/api/salaries`):
-  - Standalone revision ledger CRUD, employee profile auto-synchronization, and date collision guards.
-  - In-memory PDF payslip generation and streaming (`GET /api/salaries/:id/pdf`).
-  - Direct salary slip dispatch (`POST /api/salaries/:id/send-email`).
-- [x] **Departments** (`/api/departments`):
-  - CRUD operations with active employee headcount aggregation, duplicate name validation, and safe delete guards.
-- [x] **Countries & Currencies** (`/api/countries`, `/api/currencies`):
-  - Master data lookup, live exchange rates, ISO code search, and dependency verification.
+  - Welcome onboarding email + custom email dispatch (`/api/employees/:id/send-email`).
+- **Departments**: Create, list, edit, delete (scoped to `orgId`, unique name check).
+- **Salaries**: Standalone salary revision timeline APIs.
 
-### Step 4: Excel & CSV Export (Done - Correction: Export Only)
+### Step 4: Excel Bulk Import / Export
 
-- [x] Multi-sheet `.xlsx` export (`GET /api/reports/export/excel`): Employee Register, Department Summary, Country Distribution.
-- [x] Lightweight `.csv` export (`GET /api/reports/export/csv`).
+- Parse uploaded `.xlsx` file using `xlsx` library.
+- Validate employee codes & department IDs before inserting.
+- Use `bulkWrite()` for fast database insertion.
 
-### Step 5: Compensation Analytics & Dashboard Engine (Done)
+### Step 5: Analytics API
 
-- [x] **Executive Dashboard** (`/api/dashboard`, `/api/dashboard/metrics`):
-  - 13 key performance indicators (headcount, payroll, 30-day velocity).
-  - 6 distribution charts (monthly trends, department, level, employment type, top paying roles, country).
-  - Live activity feeds (latest 5 hires & latest 5 salary revisions).
-- [x] **Reports Engine** (`/api/reports/overview`, `/api/reports/departments`, `/api/reports/payroll-history`):
-  - Multi-pipeline aggregations with real-time currency conversions to INR and USD.
+- Write MongoDB aggregation pipeline:
+  - Normalize salaries to USD using `salary * exRate`.
+  - Calculate total payroll, average, min, max.
+  - Group by department, country, and job level (`junior`, `mid`, `senior`, `lead`, `manager`).
 
 ---
 
