@@ -16,7 +16,7 @@
 
 - [x] Countries seeded from `seeds/country.json` (245 countries)
 - [x] Currencies seeded with exchange rates matching `currency_code` from `INR_CURRENCIES_CDN` (239 currencies)
-- [x] Currency sync cron job configured for daily run at 12:00 PM UTC (`0 12 * * *`)
+- [x] Currency sync cron job configured for daily run at day start 12:00 AM UTC (`0 0 * * *`)
 - [x] Default Organization seeded: "Nick Dev" (`nickdev@yopmail.com`), configured in `.env`
 - [x] Departments seeded from `seeds/department.json` & `seeds/employees.json` (10 departments)
 - [x] Default HR user seeded: `HR_001` (`hr-nick-dev@yopmail.com`, role `HR`, jobTitle `HR Manager`)

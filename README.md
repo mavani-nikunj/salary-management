@@ -67,7 +67,7 @@ Populate 245 countries, live currencies, default organization, departments, defa
 ```bash
 npm run seed
 ```
-- **Currency Cron**: Daily at 12:00 PM UTC (`0 12 * * *`), automatically syncs exchange rates against INR from CDN.
+- **Currency Cron**: Daily at day start 12:00 AM UTC (`0 0 * * *`), automatically syncs exchange rates against INR from CDN.
 - **Default Org**: "Nick Dev" (`nickdev@yopmail.com` / `Admin@123`)
 - **Default HR**: `HR_001` (`hr-nick-dev@yopmail.com` / `Admin@123`, role: `HR`)
 

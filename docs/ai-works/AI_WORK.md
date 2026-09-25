@@ -7,7 +7,7 @@
 - **Roles & Auth**: Employees have `role: "HR" | "Employee"`. Multi-tenancy scopes every employee, department, and salary operation by `orgId`.
 - **API Response**: Always use `sendResponse(res, status, message, data)` from `@/utils/response`.
 - **Swagger**: New routes must include `@swagger` annotations referencing schemas from `@/swagger/schemas`.
-- **Currency Cron**: Daily UTC 12:00 PM cron job (`@/cron/currency.cron`) updates `exRate` from `INR_CURRENCIES_CDN`.
+- **Currency Cron**: Daily day start 12:00 AM UTC (`0 0 * * *`) cron job (`@/cron/currency.cron`) updates `exRate` from `INR_CURRENCIES_CDN`.
 - **Verification**: Always run `cmd /c "npx tsc --noEmit"` before completing a step.
 
 ---
@@ -22,7 +22,7 @@
 - [x] Seed departments from `seeds/department.json` & `employees.json` (10 departments).
 - [x] Seed default HR Employee (`HR_001`, `hr-nick-dev@yopmail.com`, role: `HR`).
 - [x] Seed 10,000 employees from `seeds/employees.json` with batch-created initial Salary records.
-- [x] Automated UTC 12:00 PM cron job to re-sync `exRate` from CDN daily.
+- [x] Automated day start 12:00 AM UTC (`0 0 * * *`) cron job to re-sync `exRate` from CDN daily.
 - [x] Standalone command: `npm run seed`.
 
 ### Step 2: Auth Middleware & Scoping
