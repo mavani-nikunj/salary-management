@@ -6,6 +6,8 @@ import { departmentSchemas } from "./department.swagger";
 import { employeeSchemas } from "./employee.swagger";
 import { salarySchemas } from "./salary.swagger";
 import { authSchemas } from "./auth.swagger";
+import { reportSchemas } from "./report.swagger";
+import { dashboardSchemas } from "./dashboard.swagger";
 
 export const swaggerSchemas = {
   ...commonSchemas,
@@ -16,6 +18,8 @@ export const swaggerSchemas = {
   ...employeeSchemas,
   ...salarySchemas,
   ...authSchemas,
+  ...reportSchemas,
+  ...dashboardSchemas,
 };
 
 export default swaggerSchemas;

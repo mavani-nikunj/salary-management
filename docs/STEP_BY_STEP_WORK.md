@@ -60,13 +60,24 @@
 
 - [ ] Upload `.xlsx` file to import employees in bulk
 - [ ] Validate rows and insert using `bulkWrite()`
-- [ ] Export salary reports to Excel
+- [x] Export salary reports to Excel (`GET /api/reports/export/excel`) & CSV (`GET /api/reports/export/csv`)
+  - Multi-sheet workbook: Employee Register, Department Summary, Country Distribution
+  - Filterable by department, country, status, salary range, and level
 
-### Step 6: Compensation Analytics API
+### Step 6: Compensation Analytics API (Done)
 
-- [ ] Aggregation endpoint for total payroll, avg/min/max salary
-- [ ] Breakdown by department, country, and job level
-- [ ] Currency conversion to USD for comparison
+- [x] Aggregation endpoint for total payroll, avg/min/max salary (`GET /api/reports/overview`):
+  - Headcount metrics (total, active, inactive, departments)
+  - Currency conversion to INR and USD using live exchange rates
+  - Multi-dimensional breakdown: department, level, employment type, currency, top countries
+- [x] Department compensation report (`GET /api/reports/departments`):
+  - Active headcount, total budget, average/min/max salary, level distributions
+- [x] Historical payroll trend report (`GET /api/reports/payroll-history`):
+  - Monthly revision counts and disbursement trends over time
+- [x] Consolidated Executive Dashboard API (`GET /api/dashboard` & `GET /api/dashboard/metrics`):
+  - 13 Key Performance Indicators (KPIs) including 30-day new hires, leavers, and revision velocity
+  - 6 Real-time visual chart datasets (monthly trend, department distribution, level distribution, employment type, top paying roles, country distribution)
+  - Live activity feeds (latest 5 employee hires & latest 5 salary revisions)
 
 ### Step 7: Frontend Web App
 

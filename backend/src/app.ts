@@ -10,6 +10,8 @@ import { sendResponse } from "@/utils/response";
 import authRoutes from "@/routes/auth.routes";
 import employeeRoutes from "@/routes/employee.routes";
 import salaryRoutes from "@/routes/salary.routes";
+import reportRoutes from "@/routes/report.routes";
+import dashboardRoutes from "@/routes/dashboard.routes";
 
 const app: Express = express();
 
@@ -34,6 +36,8 @@ app.get("/health", (req: Request, res: Response) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/salaries", salaryRoutes);
+app.use("/api/reports", reportRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 // Setup Swagger API Documentation
 setupSwagger(app);
