@@ -5,6 +5,7 @@
 - **Imports**: Always use path alias `@/*` (e.g. `import { Employee } from "@/models"`).
 - **Multi-Tenancy**: Every employee, department, and salary operation **must** be filtered by `orgId`.
 - **API Response**: Always use `sendResponse(res, status, message, data)` from `@/utils/response`.
+- **Swagger**: New routes must include `@swagger` annotations referencing schemas from `@/swagger/schemas`.
 - **Verification**: Always run `cmd /c "npx tsc --noEmit"` before completing a step.
 
 ---

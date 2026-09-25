@@ -1,9 +1,10 @@
+import "dotenv/config";
 import express, { Express, Request, Response, NextFunction } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 import morgan from "morgan";
-import { setupSwagger } from "@/config/swagger";
+import { setupSwagger } from "@/swagger";
 import { sendResponse } from "@/utils/response";
 
 import authRoutes from "@/routes/auth.routes";

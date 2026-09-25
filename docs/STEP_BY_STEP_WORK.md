@@ -1,6 +1,6 @@
 # Project Work - Step-by-Step
 
-### Step 1: Database Models (Done)
+### Step 1: Database Models & Swagger Setup (Done)
 - [x] Set up Mongoose models in `backend/src/models/`:
   - `Organization` (name, email, passwordHash, status)
   - `Country` (name, code)
@@ -8,6 +8,8 @@
   - `Department` (orgId, name, status) -> Compound unique: `[orgId, name]`
   - `Employee` (orgId, employeeCode, names, email, departmentId, level, countryId, currencyId, salary, hireDate, employmentType, status) -> Compound unique: `[orgId, employeeCode]`
   - `Salary` (employeeId, baseSalary, paySalary, currencyId, effectiveDate, remark) -> Compound unique: `[employeeId, effectiveDate]`
+- [x] Modular Swagger setup in `backend/src/swagger/`:
+  - `swagger.config.ts`, `schemas/` (OpenAPI schemas for all models), `/api-docs` & `/api-docs.json` endpoints
 
 ### Step 2: Seeders & Initial Data
 - [ ] Create seed script to populate:

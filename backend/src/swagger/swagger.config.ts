@@ -1,0 +1,48 @@
+import "dotenv/config";
+import { Options } from "swagger-jsdoc";
+import { swaggerSchemas } from "./schemas";
+
+export const swaggerOptions: Options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "ACME Salary Management API",
+      version: "1.0.0",
+      description:
+        "High-performance REST API documentation for ACME Organization Employee Salary Management System.",
+      contact: {
+        name: "API Support",
+        email: "support@acme.com",
+      },
+    },
+    servers: [
+      {
+        url: `http://localhost:${process.env.PORT || 5022}`,
+        description: "Local Development Server",
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+          description: "Enter your JWT token in the format: Bearer <token>",
+        },
+      },
+      schemas: swaggerSchemas,
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+  apis: [
+    "./src/routes/*.ts",
+    "./src/routes/**/*.ts",
+    "./src/app.ts",
+  ],
+};
+
+export default swaggerOptions;
