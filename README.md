@@ -86,7 +86,7 @@ npm run seed
 - [x] **Step 1**: Core Database Models & Modular Swagger Setup
 - [x] **Step 2**: Database Seeders, Live Currency Cron & 10k Records Initial Data
 - [x] **Step 3**: Multi-Tenant JWT Auth Middleware & Scoping (Login, Forgot/Reset Password, Staged Registration)
-- [x] **Step 4**: Core Employee CRUD, Multi-Faceted Filters, Paginated Salary Ledger & PDF Salary Slip Email Dispatch
-- [ ] **Step 5**: High-Volume Bulk Excel Upload & Export (`bulkWrite` upload in progress, Excel & CSV export ready)
-- [x] **Step 6**: Compensation Analytics & Aggregation Engine (Overview, Departments, Monthly Trends, Currency Conversion to INR & USD)
+- [x] **Step 4**: Core Employee, Salary, Department, Country & Currency CRUD & Master Data APIs
+- [x] **Step 5**: Excel & CSV Payroll Export (`.xlsx` multi-sheet workbook & `.csv` exports) *(Correction: Export Only)*
+- [x] **Step 6**: Compensation Analytics & Consolidated Dashboard Engine (`/api/reports` & `/api/dashboard`)
 - [ ] **Step 7**: Frontend Management Web Application

@@ -12,6 +12,9 @@ import employeeRoutes from "@/routes/employee.routes";
 import salaryRoutes from "@/routes/salary.routes";
 import reportRoutes from "@/routes/report.routes";
 import dashboardRoutes from "@/routes/dashboard.routes";
+import departmentRoutes from "@/routes/department.routes";
+import countryRoutes from "@/routes/country.routes";
+import currencyRoutes from "@/routes/currency.routes";
 
 const app: Express = express();
 
@@ -38,6 +41,9 @@ app.use("/api/employees", employeeRoutes);
 app.use("/api/salaries", salaryRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/departments", departmentRoutes);
+app.use("/api/countries", countryRoutes);
+app.use("/api/currencies", currencyRoutes);
 
 // Setup Swagger API Documentation
 setupSwagger(app);

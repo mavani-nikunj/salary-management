@@ -53,16 +53,22 @@
   - Delete revision (`DELETE /api/salaries/:id`): auto-syncs employee salary with remaining latest record
   - PDF stream & download (`GET /api/salaries/:id/pdf`): direct PDF render
   - Direct slip email (`POST /api/salaries/:id/send-email`): zero-payload direct payslip email dispatch
-- [ ] Department routes (create, list, update, delete)
-- [ ] Country & Currency master data routes
+- [x] Department routes (`/api/departments`):
+  - List departments with active employee headcounts & search (`GET /api/departments`)
+  - Department details with total salary expense & average salary (`GET /api/departments/:id`)
+  - Create department with duplicate guard (`POST /api/departments`)
+  - Update department name and status (`PUT /api/departments/:id`)
+  - Delete department with employee assignment protection (`DELETE /api/departments/:id`)
+- [x] Country & Currency master data routes (`/api/countries`, `/api/currencies`):
+  - List & search countries (`GET /api/countries`), get by ID or 2-letter ISO code (`GET /api/countries/:id`), create, update, delete
+  - List & search currencies with live exchange rates (`GET /api/currencies`), get by ID or code (`GET /api/currencies/:id`), create, update, delete
 
-### Step 5: Excel Bulk Import / Export
+### Step 5: Excel & CSV Export (Done - Correction: Export Only)
 
-- [ ] Upload `.xlsx` file to import employees in bulk
-- [ ] Validate rows and insert using `bulkWrite()`
-- [x] Export salary reports to Excel (`GET /api/reports/export/excel`) & CSV (`GET /api/reports/export/csv`)
+- [x] Export salary reports to Excel (`GET /api/reports/export/excel`):
   - Multi-sheet workbook: Employee Register, Department Summary, Country Distribution
   - Filterable by department, country, status, salary range, and level
+- [x] Export employee payroll ledger to CSV (`GET /api/reports/export/csv`)
 
 ### Step 6: Compensation Analytics API (Done)
 
