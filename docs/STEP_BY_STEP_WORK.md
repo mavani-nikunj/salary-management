@@ -107,8 +107,19 @@
   - Development mode instant redirect helper displaying generated `resetToken`
   - Set new password page (`/reset-password`) with token validation, dual password matching, visibility toggles, and direct redirect to sign-in
   - Server actions `CallForgotPassword`, `CallResetPassword`, and `CallChangePassword` in `auth.action.ts`
+- [x] Analytics dashboard with charts & Sidebar (`/dashboard`):
+  - Responsive Sidebar component (`src/components/Sidebar.tsx`) with desktop sticky and mobile overlay drawer navigation
+  - Live Dashboard API integration via `CallGetDashboard` action (`GET /api/dashboard`)
+  - 4 Key Performance Indicator cards (Headcount, Monthly Payroll, Average Salary, 30-Day Activity)
+  - Currency conversion toggle (USD / INR)
+  - 4 Recharts visualizations:
+    - Monthly Payroll Disbursement Trend (`AreaChart` with gradient fill)
+    - Department Headcount Distribution (`BarChart`)
+    - Workforce Seniority Breakdown (`PieChart` donut)
+    - Employment Type Ratio (`BarChart` horizontal)
+  - Live feeds: Recent Employee Onboardings & Recent Salary Revisions
 - [ ] Employee management table (filters, search, pagination)
 - [ ] Salary history modal & revision form
-- [ ] Analytics dashboard with charts
 - [ ] Excel download buttons
+
 
