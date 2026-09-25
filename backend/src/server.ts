@@ -17,9 +17,13 @@ if (!isDev && cluster.isPrimary) {
   console.log(`Primary process ${process.pid} is running`);
   console.log(`Setting up ${numCPUs} workers for high concurrency...`);
 
-  // Run DB Seed exactly ONCE before firing off the 8 Workers
+  // Run DB Seed if NODE_ENV is production before firing off workers
   connectDB()
-    .then(() => seedDatabase())
+    .then(async () => {
+      if (process.env.NODE_ENV === "production") {
+        await seedDatabase();
+      }
+    })
     .then(() => {
       // Fork workers.
       for (let i = 0; i < numCPUs; i++) {
@@ -37,8 +41,8 @@ if (!isDev && cluster.isPrimary) {
   // In dev mode, this block runs directly on the primary process without clustering
   connectDB()
     .then(async () => {
-      // If we are in Dev Mode, seed the DB locally on this single process
-      if (isDev) {
+      // Run seeder only if NODE_ENV is production
+      if (process.env.NODE_ENV === "production") {
         await seedDatabase();
       }
     })

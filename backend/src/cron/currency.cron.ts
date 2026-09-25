@@ -64,14 +64,18 @@ export const syncCurrencyRates = async (): Promise<void> => {
 };
 
 /**
- * Initializes the daily cron job running at 12:00 PM UTC
+ * Initializes the daily cron job running at day start (12:00 AM / 00:00 UTC)
  */
 export const initCurrencyCron = (): void => {
-  // 0 12 * * * = Every day at 12:00 PM (noon)
+  // 0 0 * * * = Every day at day start (12:00 AM / 00:00 UTC)
+  const cronExpression = process.env.CURRENCY_CRON_SCHEDULE || "0 0 * * *";
+
   cron.schedule(
-    "0 12 * * *",
+    cronExpression,
     async () => {
-      console.log("[Cron] Triggering scheduled currency rate update (12:00 PM UTC)...");
+      console.log(
+        "[Cron] Triggering scheduled currency rate update at day start (12:00 AM / 00:00 UTC)...",
+      );
       await syncCurrencyRates();
     },
     {
@@ -80,7 +84,7 @@ export const initCurrencyCron = (): void => {
   );
 
   console.log(
-    "[Cron] Currency update cron job initialized: Scheduled for 12:00 PM UTC daily.",
+    `[Cron] Currency update cron job initialized: Scheduled for day start (12:00 AM / 00:00 UTC) daily.`,
   );
 };
 

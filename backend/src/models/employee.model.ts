@@ -23,6 +23,8 @@ export interface IEmployee extends Document {
   status: EmployeeStatus;
   orgId: Types.ObjectId;
   passwordHash?: string;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -128,6 +130,14 @@ const EmployeeSchema: Schema<IEmployee> = new Schema(
       type: String,
       required: false,
     },
+    resetPasswordToken: {
+      type: String,
+      required: false,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      required: false,
+    },
   },
   {
     timestamps: true,
@@ -141,7 +151,22 @@ EmployeeSchema.index({ orgId: 1, employeeCode: 1 }, { unique: true });
 // Performance indexes for multi-tenant and dashboard query operations
 EmployeeSchema.index({ orgId: 1, departmentId: 1 });
 EmployeeSchema.index({ orgId: 1, countryId: 1 });
+EmployeeSchema.index({ orgId: 1, currencyId: 1 });
+EmployeeSchema.index({ orgId: 1, role: 1 });
+EmployeeSchema.index({ orgId: 1, level: 1 });
+EmployeeSchema.index({ orgId: 1, employmentType: 1 });
 EmployeeSchema.index({ orgId: 1, status: 1 });
+EmployeeSchema.index({ orgId: 1, salary: 1 });
+EmployeeSchema.index({ orgId: 1, hireDate: -1 });
+
+// Text search index for fast multi-field search
+EmployeeSchema.index({
+  employeeCode: "text",
+  firstName: "text",
+  lastName: "text",
+  email: "text",
+  jobTitle: "text",
+});
 
 export const Employee: Model<IEmployee> = mongoose.model<IEmployee>(
   "Employee",

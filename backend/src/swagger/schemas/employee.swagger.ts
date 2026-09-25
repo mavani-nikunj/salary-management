@@ -82,4 +82,31 @@ export const employeeSchemas = {
       status: { type: "string", enum: ["Active", "Inactive"], default: "Active" },
     },
   },
+  UpdateEmployeeInput: {
+    type: "object",
+    properties: {
+      firstName: { type: "string", example: "Jane" },
+      lastName: { type: "string", example: "Doe" },
+      jobTitle: { type: "string", example: "Principal Engineer" },
+      departmentId: { type: "string", example: "64e0a1f8b1c2d3e4f5a6b7f1" },
+      role: { type: "string", enum: ["HR", "Employee"], example: "Employee" },
+      level: {
+        type: "string",
+        enum: ["junior", "mid", "senior", "lead", "manager"],
+        example: "lead",
+      },
+      countryId: { type: "string", example: "64e0a1f8b1c2d3e4f5a6b7d1" },
+      currencyId: { type: "string", example: "64e0a1f8b1c2d3e4f5a6b7e1" },
+      salary: { type: "number", example: 135000 },
+      salaryRemark: { type: "string", example: "Annual Merit Increment" },
+      salaryEffectiveDate: { type: "string", format: "date", example: "2025-01-01" },
+      employmentType: {
+        type: "string",
+        enum: ["Full-time", "Part-time", "Contract"],
+        example: "Full-time",
+      },
+      status: { type: "string", enum: ["Active", "Inactive"], example: "Active" },
+      leaveDate: { type: "string", format: "date" },
+    },
+  },
 };

@@ -19,14 +19,14 @@ A high-performance, web-based employee salary management system built for **ACME
 
 All core entities and multi-tenant compound unique indexes are configured:
 
-| Model            | Collection      | Key Fields & Indexes                                                           |
-| :--------------- | :-------------- | :----------------------------------------------------------------------------- |
-| **Organization** | `organizations` | Root tenant entity, status enum (`Active`, `Inactive`), unique `email`         |
-| **Country**      | `countries`     | Master registry, unique `name`, unique `code`                                  |
-| **Currency**     | `currencies`    | Linked to Country, `exRate` (min 0.0001), compound unique: `[countryId, code]` |
-| **Department**   | `departments`   | Scoped to Org, compound unique: `[orgId, name]`                                |
+| Model            | Collection      | Key Fields & Indexes                                                                                 |
+| :--------------- | :-------------- | :--------------------------------------------------------------------------------------------------- |
+| **Organization** | `organizations` | Root tenant entity, status enum (`Active`, `Inactive`), unique `email`                               |
+| **Country**      | `countries`     | Master registry, unique `name`, unique `code`                                                        |
+| **Currency**     | `currencies`    | Linked to Country, `exRate` (min 0.0001), compound unique: `[countryId, code]`                       |
+| **Department**   | `departments`   | Scoped to Org, compound unique: `[orgId, name]`                                                      |
 | **Employee**     | `employees`     | Scoped to Org, compound unique: `[orgId, employeeCode]`, role (`HR`, `Employee`), level & type enums |
-| **Salary**       | `salaries`      | Scoped to Employee, compound unique: `[employeeId, effectiveDate]`             |
+| **Salary**       | `salaries`      | Scoped to Employee, compound unique: `[employeeId, effectiveDate]`                                   |
 
 ### 2. Modular Swagger Documentation (`backend/src/swagger/`)
 
@@ -63,11 +63,14 @@ npm run dev
 ```
 
 ### 3. Database Seeding & Cron Job
+
 Populate 245 countries, live currencies, default organization, departments, default HR user, and 10,000 employees:
+
 ```bash
 npm run seed
 ```
-- **Currency Cron**: Daily at 12:00 PM UTC (`0 12 * * *`), automatically syncs exchange rates against INR from CDN.
+
+- **Currency Cron**: Daily at day start 12:00 AM UTC (`0 0 * * *`), automatically syncs exchange rates against INR from CDN.
 - **Default Org**: "Nick Dev" (`nickdev@yopmail.com` / `Admin@123`)
 - **Default HR**: `HR_001` (`hr-nick-dev@yopmail.com` / `Admin@123`, role: `HR`)
 
@@ -82,8 +85,8 @@ npm run seed
 
 - [x] **Step 1**: Core Database Models & Modular Swagger Setup
 - [x] **Step 2**: Database Seeders, Live Currency Cron & 10k Records Initial Data
-- [ ] **Step 3**: Multi-Tenant JWT Auth Middleware & Scoping
-- [ ] **Step 4**: Core CRUD APIs (Departments, Employees, Salary Revisions)
-- [ ] **Step 5**: High-Volume Bulk Excel Upload & Export (`bulkWrite`)
-- [ ] **Step 6**: Compensation Analytics & Aggregation Engine
+- [x] **Step 3**: Multi-Tenant JWT Auth Middleware & Scoping (Login, Forgot/Reset Password, Staged Registration)
+- [x] **Step 4**: Core Employee, Salary, Department, Country & Currency CRUD & Master Data APIs
+- [x] **Step 5**: Excel & CSV Payroll Export (`.xlsx` multi-sheet workbook & `.csv` exports) *(Correction: Export Only)*
+- [x] **Step 6**: Compensation Analytics & Consolidated Dashboard Engine (`/api/reports` & `/api/dashboard`)
 - [ ] **Step 7**: Frontend Management Web Application
