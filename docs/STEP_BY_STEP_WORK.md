@@ -45,8 +45,15 @@
   - Automated welcome onboarding email upon employee registration
   - Custom email dispatch endpoint (`POST /api/employees/:id/send-email`)
   - Official Salary Slip PDF generation (PDFKit) and attachment dispatch (`salaryId` selection)
+- [x] Salary CRUD & Revision Ledger (`/api/salaries`):
+  - List & filter revisions (`GET /api/salaries`): search, employeeId, departmentId, currencyId, salary range, effectiveDate range, sorting, pagination
+  - Single salary details (`GET /api/salaries/:id`) with populated employee & currency
+  - Create revision (`POST /api/salaries`): unique date check, auto employee profile synchronization, optional instant PDF email
+  - Update revision (`PUT /api/salaries/:id`): date collision guard, employee profile resync
+  - Delete revision (`DELETE /api/salaries/:id`): auto-syncs employee salary with remaining latest record
+  - PDF stream & download (`GET /api/salaries/:id/pdf`): direct PDF render
+  - Direct slip email (`POST /api/salaries/:id/send-email`): zero-payload direct payslip email dispatch
 - [ ] Department routes (create, list, update, delete)
-- [ ] Salary history routes (standalone salary timeline endpoints)
 - [ ] Country & Currency master data routes
 
 ### Step 5: Excel Bulk Import / Export
