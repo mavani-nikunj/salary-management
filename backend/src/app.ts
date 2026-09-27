@@ -15,6 +15,7 @@ import dashboardRoutes from "@/routes/dashboard.routes";
 import departmentRoutes from "@/routes/department.routes";
 import countryRoutes from "@/routes/country.routes";
 import currencyRoutes from "@/routes/currency.routes";
+import { connectDB } from "@/config/db";
 
 const app: Express = express();
 
@@ -26,6 +27,16 @@ app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 app.use(morgan("dev"));
 
+// Root API Info Route
+app.get("/", (_req: Request, res: Response) => {
+  return sendResponse(res, 200, "Salary Management API is running", {
+    name: "Salary Management API",
+    version: "1.0.0",
+    docs: "/api-docs",
+    health: "/health",
+  });
+});
+
 // Basic Health Check Route
 app.get("/health", (req: Request, res: Response) => {
   return sendResponse(res, 200, "Server is healthy", {
@@ -33,6 +44,16 @@ app.get("/health", (req: Request, res: Response) => {
     timestamp: new Date().toISOString(),
     pid: process.pid,
   });
+});
+
+// Ensure database connection is active (vital for Vercel Serverless cold-starts & warm lambdas)
+app.use(async (_req: Request, _res: Response, next: NextFunction) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Setup API Routes
