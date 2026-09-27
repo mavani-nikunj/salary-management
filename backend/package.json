@@ -7,7 +7,8 @@
     "dev": "ts-node-dev -r tsconfig-paths/register src/server.ts",
     "seed": "ts-node -r tsconfig-paths/register src/config/run-seed.ts",
     "build": "tsc && tsc-alias",
-    "start": "node dist/server.js",
+    "seed:prod": "node dist/config/run-seed.js",
+    "start": "node dist/config/run-seed.js && node dist/server.js",
     "test": "jest --runInBand --detectOpenHandles"
   },
   "keywords": [],
