@@ -60,7 +60,7 @@ export const getDepartments = async (
       Department.countDocuments(query),
     ]);
 
-    // Aggregate employee counts per department for this organization
+    // Aggregate employee counts and avg salary per department for this organization
     const deptIds = departments.map((d) => d._id);
     const employeeCounts = await Employee.aggregate([
       { $match: { orgId: new mongoose.Types.ObjectId(orgId), departmentId: { $in: deptIds } } },
@@ -71,21 +71,29 @@ export const getDepartments = async (
           activeEmployees: {
             $sum: { $cond: [{ $eq: ["$status", "Active"] }, 1, 0] },
           },
+          avgSalary: {
+            $avg: { $cond: [{ $eq: ["$status", "Active"] }, "$salary", null] },
+          },
         },
       },
     ]);
 
-    const countMap = new Map<string, { total: number; active: number }>();
+    const countMap = new Map<string, { total: number; active: number; avgSalaryINR: number }>();
     employeeCounts.forEach((c) => {
-      countMap.set(String(c._id), { total: c.totalEmployees, active: c.activeEmployees });
+      countMap.set(String(c._id), {
+        total: c.totalEmployees,
+        active: c.activeEmployees,
+        avgSalaryINR: Math.round(c.avgSalary || 0),
+      });
     });
 
     const enrichedDepartments = departments.map((dept) => {
-      const counts = countMap.get(String(dept._id)) || { total: 0, active: 0 };
+      const counts = countMap.get(String(dept._id)) || { total: 0, active: 0, avgSalaryINR: 0 };
       return {
         ...dept,
         totalEmployees: counts.total,
         activeEmployees: counts.active,
+        avgSalaryINR: counts.avgSalaryINR,
       };
     });
 

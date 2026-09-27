@@ -5,7 +5,9 @@ import { getAuthToken } from "../api";
 /**
  * Shared helper to create a server action with authentication.
  */
-export async function createAction<T>(apiFn: (token: string) => Promise<T>) {
+export async function createAction<T = any>(
+  apiFn: (token: string) => Promise<T>
+): Promise<{ data: any; error: string | null }> {
   try {
     const token = await getAuthToken();
     if (!token) return { data: null, error: "Unauthorized" };

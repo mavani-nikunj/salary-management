@@ -85,10 +85,10 @@
   - 6 Real-time visual chart datasets (monthly trend, department distribution, level distribution, employment type, top paying roles, country distribution)
   - Live activity feeds (latest 5 employee hires & latest 5 salary revisions)
 
-### Step 7: Frontend Web App
+### Step 7: Frontend Web App (Done)
 
-- [ ] Login screen for organization
-- [ ] Employee management table (filters, search, pagination)
-- [ ] Salary history modal & revision form
-- [ ] Analytics dashboard with charts
-- [ ] Excel upload/download buttons
+- [x] Login screen for organization
+- [x] Employee management table (filters, search, pagination)
+- [x] Salary history modal & revision form
+- [x] Analytics dashboard with charts
+- [x] Excel export & CSV download buttons

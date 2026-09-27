@@ -3,7 +3,7 @@ import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 // --- 1. API CONFIGURATION ---
-export const BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
+export const BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:5022";
 
 export const apiClient = axios.create({
   baseURL: `${BASE_URL}/api`,
@@ -14,14 +14,20 @@ export const apiClient = axios.create({
 
 // Response interceptor for consistent error handling
 apiClient.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    const resData = response.data;
+    if (resData && typeof resData === "object" && resData.success === undefined) {
+      resData.success = resData.code ? (resData.code >= 200 && resData.code < 300) : (response.status >= 200 && response.status < 300);
+    }
+    return resData;
+  },
   (error) => {
     const message =
       error.response?.data?.message ||
       error.message ||
       "An unexpected error occurred";
     return Promise.reject(new Error(message));
-  },
+  }
 );
 
 // --- 2. AUTH OPTIONS ---
@@ -30,22 +36,51 @@ export const authOptions: AuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        userId: { label: "Email / Phone", type: "text" },
+        email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: any) {
-        return credentials;
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Please provide email and password");
+        }
+        try {
+          const res: any = await apiClient.post("/auth/login", {
+            email: credentials.email,
+            password: credentials.password,
+          });
+
+          if (res?.data?.token && res?.data?.user) {
+            return {
+              id: res.data.user.id,
+              ...res.data.user,
+              token: res.data.token,
+            };
+          }
+          throw new Error(res?.message || "Invalid credentials");
+        } catch (err: any) {
+          throw new Error(err.message || "Login failed");
+        }
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, trigger, session, user }) {
+    async jwt({ token, trigger, session, user }: any) {
+      if (user) {
+        token.user = user;
+        token.token = user.token;
+      }
       if (trigger === "update" && session) {
         return { ...token, ...session };
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: any) {
+      if (token?.user) {
+        session.user = token.user;
+      }
+      if (token?.token) {
+        session.token = token.token;
+      }
       return session;
     },
     async redirect({ url, baseUrl }) {
@@ -60,18 +95,12 @@ export const authOptions: AuthOptions = {
 };
 
 // --- 3. INTERNAL HELPERS ---
-/**
- * Utility to get the current user's session token securely on the server.
- */
 export async function getAuthToken() {
   const { getServerSession } = await import("next-auth/next");
   const session: any = await getServerSession(authOptions);
   return session?.token ? `Bearer ${session.token}` : "";
 }
 
-/**
- * Utility to merge Authorization header with other axios config.
- */
 export const withAuth = (token: string, config: any = {}) => ({
   ...config,
   headers: {
