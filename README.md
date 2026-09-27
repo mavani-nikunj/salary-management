@@ -36,8 +36,9 @@ All core entities and multi-tenant compound unique indexes are configured:
 
 ### 3. Project Documentation
 
-- [docs/STEP_BY_STEP_WORK.md](file:///c:/Users/dobob/OneDrive/Desktop/P/salary-management-/docs/STEP_BY_STEP_WORK.md): Concise 7-step implementation checklist.
-- [docs/ai-works/AI_WORK.md](file:///c:/Users/dobob/OneDrive/Desktop/P/salary-management-/docs/ai-works/AI_WORK.md): Operational rules and task steps for AI development.
+- [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md): Product framing, deliberate scope exclusions, architecture diagrams, trade-offs, and performance design.
+- [docs/STEP_BY_STEP_WORK.md](docs/STEP_BY_STEP_WORK.md): Step-by-step implementation checklist.
+- [docs/ai-works/AI_WORK.md](docs/ai-works/AI_WORK.md): Operational rules and task steps for AI development.
 
 ---
 
@@ -74,7 +75,18 @@ npm run seed
 - **Default Org**: "Nick Dev" (`nickdev@yopmail.com` / `Admin@123`)
 - **Default HR**: `HR_001` (`hr-nick-dev@yopmail.com` / `Admin@123`, role: `HR`)
 
-### 4. Verify Endpoints
+### 4. Run Unit Test Suite
+
+Fast, deterministic domain unit tests covering compensation conversions, validation rules, state transitions, salary revisions, multi-tenancy isolation, and department metrics:
+
+```bash
+cd backend
+npm test
+```
+
+*Executes 33 tests across 6 test suites in ~1.5 seconds.*
+
+### 5. Verify Endpoints
 
 - **Health Check**: `GET http://localhost:5022/health`
 - **API Documentation**: `GET http://localhost:5022/api-docs`
