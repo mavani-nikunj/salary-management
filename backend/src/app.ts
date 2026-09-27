@@ -16,6 +16,7 @@ import departmentRoutes from "./routes/department.routes";
 import countryRoutes from "./routes/country.routes";
 import currencyRoutes from "./routes/currency.routes";
 import { connectDB } from "./config/db";
+import { seedDatabase } from "./config/seeder";
 
 const app: Express = express();
 
@@ -44,6 +45,22 @@ app.get("/health", (req: Request, res: Response) => {
     timestamp: new Date().toISOString(),
     pid: process.pid,
   });
+});
+
+// Database Seeding Route (accessible for Vercel Serverless and remote environments)
+app.all("/api/seed", async (_req: Request, res: Response) => {
+  try {
+    await connectDB();
+    const result = await seedDatabase();
+    return sendResponse(
+      res,
+      result.success ? 200 : 500,
+      result.message,
+      result.stats || { error: result.error }
+    );
+  } catch (error: any) {
+    return sendResponse(res, 500, "Seeding failed", { error: error.message });
+  }
 });
 
 // Ensure database connection is active (vital for Vercel Serverless cold-starts & warm lambdas)

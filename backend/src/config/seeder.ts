@@ -18,18 +18,35 @@ const CURRENCY_CDN_URL =
  * Resolves the path to a seed json file, checking cwd and __dirname
  */
 const resolveSeedPath = (fileName: string): string => {
-  const localSeedsDir = path.resolve(process.cwd(), "../seeds", fileName);
-  if (fs.existsSync(localSeedsDir)) {
-    return localSeedsDir;
+  const candidates = [
+    path.resolve(process.cwd(), "seeds", fileName),
+    path.resolve(process.cwd(), "backend/seeds", fileName),
+    path.resolve(__dirname, "../../seeds", fileName),
+    path.resolve(__dirname, "../../../seeds", fileName),
+    path.resolve(process.cwd(), "../seeds", fileName),
+  ];
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) {
+      return candidate;
+    }
   }
-  const relativeDir = path.resolve(__dirname, "../../../seeds", fileName);
-  if (fs.existsSync(relativeDir)) {
-    return relativeDir;
-  }
-  return localSeedsDir;
+  return candidates[0];
 };
 
-export const seedDatabase = async (): Promise<void> => {
+export interface SeedResult {
+  success: boolean;
+  message: string;
+  stats?: {
+    countries: number;
+    currencies: number;
+    departments: number;
+    employees: number;
+    salaries: number;
+  };
+  error?: string;
+}
+
+export const seedDatabase = async (): Promise<SeedResult> => {
   try {
     console.log("--------------------------------------------------");
     console.log("[Seeder] Starting database seeding process...");
@@ -40,7 +57,11 @@ export const seedDatabase = async (): Promise<void> => {
     const countryJsonPath = resolveSeedPath("country.json");
     if (!fs.existsSync(countryJsonPath)) {
       console.warn(`[Seeder] country.json not found at ${countryJsonPath}`);
-      return;
+      return {
+        success: false,
+        message: `country.json not found at ${countryJsonPath}`,
+        error: "Missing seed files",
+      };
     }
 
     const rawCountryData = JSON.parse(
@@ -409,8 +430,33 @@ export const seedDatabase = async (): Promise<void> => {
 
     console.log("[Seeder] Database seeding successfully completed!");
     console.log("--------------------------------------------------");
+
+    const [countries, currencies, departments, employees, salaries] = await Promise.all([
+      Country.countDocuments(),
+      Currency.countDocuments(),
+      Department.countDocuments({ orgId: organization._id }),
+      Employee.countDocuments({ orgId: organization._id }),
+      Salary.countDocuments({}),
+    ]);
+
+    return {
+      success: true,
+      message: "Database seeding successfully completed!",
+      stats: {
+        countries,
+        currencies,
+        departments,
+        employees,
+        salaries,
+      },
+    };
   } catch (error: any) {
     console.error("[Seeder] Error during seeding:", error);
+    return {
+      success: false,
+      message: error.message || "Seeding failed",
+      error: error.message,
+    };
   }
 };
 
