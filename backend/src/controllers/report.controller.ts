@@ -328,16 +328,26 @@ export const getDepartmentCompensationReport = async (
 
     const report = departments.map((d) => {
       const stats = statsMap.get(String(d._id)) || {};
+      const totalPayroll = Math.round((stats.totalPayroll || 0) * 100) / 100;
+      const averageSalary = Math.round((stats.averageSalary || 0) * 100) / 100;
+      const minSalary = stats.minSalary || 0;
+      const maxSalary = stats.maxSalary || 0;
+
       return {
         departmentId: d._id,
         departmentName: d.name,
+        department: d.name,
         status: d.status,
         headcount: stats.headcount || 0,
         activeHeadcount: stats.activeHeadcount || 0,
-        totalPayroll: Math.round((stats.totalPayroll || 0) * 100) / 100,
-        averageSalary: Math.round((stats.averageSalary || 0) * 100) / 100,
-        minSalary: stats.minSalary || 0,
-        maxSalary: stats.maxSalary || 0,
+        totalPayroll,
+        totalSalaryINR: totalPayroll,
+        averageSalary,
+        avgSalaryINR: averageSalary,
+        minSalary,
+        minSalaryINR: minSalary,
+        maxSalary,
+        maxSalaryINR: maxSalary,
         levels: {
           junior: stats.juniorCount || 0,
           mid: stats.midCount || 0,
@@ -381,6 +391,10 @@ export const getPayrollTrendReport = async (
 
     const orgObjectId = new mongoose.Types.ObjectId(orgId);
 
+    // Fetch USD currency to compute USD normalized totals
+    const usdCurrency = await Currency.findOne({ code: "USD" });
+    const usdExRate = usdCurrency?.exRate || 0.012;
+
     // Retrieve matching employee IDs for this organization
     const orgEmployees = await Employee.find({ orgId: orgObjectId }).select("_id").lean();
     const empIds = orgEmployees.map((e) => e._id);
@@ -388,24 +402,45 @@ export const getPayrollTrendReport = async (
     const trends = await Salary.aggregate([
       { $match: { employeeId: { $in: empIds } } },
       {
+        $lookup: {
+          from: "currencies",
+          localField: "currencyId",
+          foreignField: "_id",
+          as: "currency",
+        },
+      },
+      { $unwind: { path: "$currency", preserveNullAndEmptyArrays: true } },
+      {
         $group: {
           _id: {
             $dateToString: { format: "%Y-%m", date: "$effectiveDate" },
           },
           revisionsCount: { $sum: 1 },
           totalDisbursed: { $sum: "$paySalary" },
+          totalDisbursedINR: {
+            $sum: {
+              $divide: [
+                "$paySalary",
+                { $cond: [{ $gt: ["$currency.exRate", 0] }, "$currency.exRate", 1] },
+              ],
+            },
+          },
           averageSalary: { $avg: "$paySalary" },
         },
       },
       {
         $project: {
+          month: "$_id",
           yearMonth: "$_id",
+          count: "$revisionsCount",
           revisionsCount: 1,
           totalDisbursed: { $round: ["$totalDisbursed", 2] },
+          totalPayrollINR: { $round: ["$totalDisbursedINR", 2] },
+          totalPayrollUSD: { $round: [{ $multiply: ["$totalDisbursedINR", usdExRate] }, 2] },
           averageSalary: { $round: ["$averageSalary", 2] },
         },
       },
-      { $sort: { yearMonth: -1 } },
+      { $sort: { month: -1 } },
       { $limit: monthsCount },
     ]);
 

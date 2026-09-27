@@ -14,6 +14,7 @@ export const sendResponse = (
   data: any = null,
 ) => {
   return res.status(code).json({
+    success: code >= 200 && code < 300,
     data,
     code,
     message,
