@@ -1,8 +1,8 @@
 import { Response } from "express";
 import mongoose from "mongoose";
-import { Department, Employee } from "@/models";
-import { sendResponse } from "@/utils/response";
-import { AuthRequest } from "@/middlewares/auth.middleware";
+import { Department, Employee } from "../models";
+import { sendResponse } from "../utils/response";
+import { AuthRequest } from "../middlewares/auth.middleware";
 
 /**
  * @desc   Get departments with employee counts, status filter, search & pagination

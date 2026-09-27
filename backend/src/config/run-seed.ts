@@ -1,6 +1,6 @@
 import "dotenv/config";
-import { connectDB } from "@/config/db";
-import { seedDatabase } from "@/config/seeder";
+import { connectDB } from "../config/db";
+import { seedDatabase } from "../config/seeder";
 
 const run = async (): Promise<void> => {
   try {

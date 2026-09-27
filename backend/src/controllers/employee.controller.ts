@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import { Employee, Salary, Department, Country, Currency, Organization } from "@/models";
-import { sendResponse } from "@/utils/response";
-import { sendEmail } from "@/utils/mailer";
-import { generateSalarySlipPDF } from "@/utils/pdf";
-import { AuthRequest } from "@/middlewares/auth.middleware";
+import { Employee, Salary, Department, Country, Currency, Organization } from "../models";
+import { sendResponse } from "../utils/response";
+import { sendEmail } from "../utils/mailer";
+import { generateSalarySlipPDF } from "../utils/pdf";
+import { AuthRequest } from "../middlewares/auth.middleware";
 
 /**
  * @desc   Get employees with multi-faceted filtering, search, sorting & pagination

@@ -5,8 +5,8 @@ import {
   getPayrollTrendReport,
   exportPayrollExcel,
   exportPayrollCsv,
-} from "@/controllers/report.controller";
-import { protect } from "@/middlewares/auth.middleware";
+} from "../controllers/report.controller";
+import { protect } from "../middlewares/auth.middleware";
 
 const router = Router();
 

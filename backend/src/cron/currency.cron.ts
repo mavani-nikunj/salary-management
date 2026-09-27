@@ -1,5 +1,5 @@
 import cron from "node-cron";
-import { Currency } from "@/models";
+import { Currency } from "../models";
 
 const CURRENCY_CDN_URL =
   process.env.INR_CURRENCIES_CDN ||

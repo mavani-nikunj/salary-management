@@ -1,8 +1,8 @@
 import { Response } from "express";
 import mongoose from "mongoose";
-import { Employee, Salary, Department, Currency, Country } from "@/models";
-import { sendResponse } from "@/utils/response";
-import { AuthRequest } from "@/middlewares/auth.middleware";
+import { Employee, Salary, Department, Currency, Country } from "../models";
+import { sendResponse } from "../utils/response";
+import { AuthRequest } from "../middlewares/auth.middleware";
 
 /**
  * @desc   Get consolidated dashboard summary: KPIs, charts, and recent activity

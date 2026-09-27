@@ -2,8 +2,8 @@ import { Router } from "express";
 import {
   getDashboardSummary,
   getDashboardMetrics,
-} from "@/controllers/dashboard.controller";
-import { protect } from "@/middlewares/auth.middleware";
+} from "../controllers/dashboard.controller";
+import { protect } from "../middlewares/auth.middleware";
 
 const router = Router();
 

@@ -6,8 +6,8 @@ import {
   updateEmployee,
   deleteEmployee,
   sendEmployeeEmail,
-} from "@/controllers/employee.controller";
-import { protect } from "@/middlewares/auth.middleware";
+} from "../controllers/employee.controller";
+import { protect } from "../middlewares/auth.middleware";
 
 const router = express.Router();
 

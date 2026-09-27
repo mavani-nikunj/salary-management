@@ -7,8 +7,8 @@ import {
   resetPassword,
   getMe,
   changePassword,
-} from "@/controllers/auth.controller";
-import { protect } from "@/middlewares/auth.middleware";
+} from "../controllers/auth.controller";
+import { protect } from "../middlewares/auth.middleware";
 
 const router = express.Router();
 

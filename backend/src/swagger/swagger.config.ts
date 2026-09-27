@@ -2,6 +2,8 @@ import "dotenv/config";
 import { Options } from "swagger-jsdoc";
 import { swaggerSchemas } from "./schemas";
 
+import path from "path";
+
 export const swaggerOptions: Options = {
   definition: {
     openapi: "3.0.0",
@@ -39,9 +41,9 @@ export const swaggerOptions: Options = {
     ],
   },
   apis: [
-    "./src/routes/*.ts",
-    "./src/routes/**/*.ts",
-    "./src/app.ts",
+    path.join(__dirname, "../routes/*.{ts,js}"),
+    path.join(__dirname, "../routes/**/*.{ts,js}"),
+    path.join(__dirname, "../app.{ts,js}"),
   ],
 };
 

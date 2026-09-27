@@ -4,18 +4,18 @@ import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 import morgan from "morgan";
-import { setupSwagger } from "@/swagger";
-import { sendResponse } from "@/utils/response";
+import { setupSwagger } from "./swagger";
+import { sendResponse } from "./utils/response";
 
-import authRoutes from "@/routes/auth.routes";
-import employeeRoutes from "@/routes/employee.routes";
-import salaryRoutes from "@/routes/salary.routes";
-import reportRoutes from "@/routes/report.routes";
-import dashboardRoutes from "@/routes/dashboard.routes";
-import departmentRoutes from "@/routes/department.routes";
-import countryRoutes from "@/routes/country.routes";
-import currencyRoutes from "@/routes/currency.routes";
-import { connectDB } from "@/config/db";
+import authRoutes from "./routes/auth.routes";
+import employeeRoutes from "./routes/employee.routes";
+import salaryRoutes from "./routes/salary.routes";
+import reportRoutes from "./routes/report.routes";
+import dashboardRoutes from "./routes/dashboard.routes";
+import departmentRoutes from "./routes/department.routes";
+import countryRoutes from "./routes/country.routes";
+import currencyRoutes from "./routes/currency.routes";
+import { connectDB } from "./config/db";
 
 const app: Express = express();
 

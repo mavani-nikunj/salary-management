@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
-import { Organization, Employee, Salary } from "@/models";
-import { generateToken } from "@/utils/jwt";
-import { sendResponse } from "@/utils/response";
-import { sendEmail } from "@/utils/mailer";
-import { AuthRequest } from "@/middlewares/auth.middleware";
+import { Organization, Employee, Salary } from "../models";
+import { generateToken } from "../utils/jwt";
+import { sendResponse } from "../utils/response";
+import { sendEmail } from "../utils/mailer";
+import { AuthRequest } from "../middlewares/auth.middleware";
 
 /**
  * @desc   Login Organization or HR / Employee
