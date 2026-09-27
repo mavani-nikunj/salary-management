@@ -1,4 +1,5 @@
 # Project Documentation
 
-- [What To Do - Step-by-Step Project Work](file:///c:/Users/dobob/OneDrive/Desktop/P/salary-management-/docs/STEP_BY_STEP_WORK.md)
-- [AI Works - How AI Works on this Project](file:///c:/Users/dobob/OneDrive/Desktop/P/salary-management-/docs/ai-works/AI_WORK.md)
+- [Requirements & Architecture Document](./REQUIREMENTS.md) - Assessment product framing, scope, deliberate omissions, architecture diagrams & trade-offs.
+- [Step-by-Step Implementation Checklist](./STEP_BY_STEP_WORK.md) - Detailed step-by-step development history.
+- [AI Intentional Use & Workflows](./ai-works/AI_WORK.md) - AI-accelerated workflows and engineering practices.
