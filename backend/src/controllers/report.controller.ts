@@ -1,9 +1,9 @@
 import { Response } from "express";
 import mongoose from "mongoose";
 import * as XLSX from "xlsx";
-import { Employee, Salary, Department, Country, Currency } from "@/models";
-import { sendResponse } from "@/utils/response";
-import { AuthRequest } from "@/middlewares/auth.middleware";
+import { Employee, Salary, Department, Country, Currency } from "../models";
+import { sendResponse } from "../utils/response";
+import { AuthRequest } from "../middlewares/auth.middleware";
 
 /**
  * @desc   Get comprehensive organization compensation & payroll overview report

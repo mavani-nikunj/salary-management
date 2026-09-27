@@ -8,7 +8,7 @@ import {
   Department,
   Employee,
   Salary,
-} from "@/models";
+} from "../models";
 
 const CURRENCY_CDN_URL =
   process.env.INR_CURRENCIES_CDN ||

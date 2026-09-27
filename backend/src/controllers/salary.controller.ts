@@ -1,10 +1,10 @@
 import { Response } from "express";
 import mongoose from "mongoose";
-import { Salary, Employee, Currency, Organization, Department } from "@/models";
-import { sendResponse } from "@/utils/response";
-import { sendEmail } from "@/utils/mailer";
-import { generateSalarySlipPDF } from "@/utils/pdf";
-import { AuthRequest } from "@/middlewares/auth.middleware";
+import { Salary, Employee, Currency, Organization, Department } from "../models";
+import { sendResponse } from "../utils/response";
+import { sendEmail } from "../utils/mailer";
+import { generateSalarySlipPDF } from "../utils/pdf";
+import { AuthRequest } from "../middlewares/auth.middleware";
 
 /**
  * @desc   Get salaries with multi-faceted search, filter, sort & pagination

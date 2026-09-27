@@ -5,8 +5,8 @@ import {
   createCurrency,
   updateCurrency,
   deleteCurrency,
-} from "@/controllers/currency.controller";
-import { protect } from "@/middlewares/auth.middleware";
+} from "../controllers/currency.controller";
+import { protect } from "../middlewares/auth.middleware";
 
 const router = Router();
 

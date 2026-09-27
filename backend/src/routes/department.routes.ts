@@ -5,8 +5,8 @@ import {
   createDepartment,
   updateDepartment,
   deleteDepartment,
-} from "@/controllers/department.controller";
-import { protect } from "@/middlewares/auth.middleware";
+} from "../controllers/department.controller";
+import { protect } from "../middlewares/auth.middleware";
 
 const router = Router();
 

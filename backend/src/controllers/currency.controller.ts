@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
-import { Currency, Country, Employee, Salary } from "@/models";
-import { sendResponse } from "@/utils/response";
+import { Currency, Country, Employee, Salary } from "../models";
+import { sendResponse } from "../utils/response";
 
 /**
  * @desc   Get all currencies with live exchange rates, country details, search & pagination

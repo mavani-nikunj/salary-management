@@ -7,8 +7,8 @@ import {
   deleteSalary,
   downloadSalarySlipPDF,
   sendSalarySlipEmailDirectly,
-} from "@/controllers/salary.controller";
-import { protect } from "@/middlewares/auth.middleware";
+} from "../controllers/salary.controller";
+import { protect } from "../middlewares/auth.middleware";
 
 const router = Router();
 

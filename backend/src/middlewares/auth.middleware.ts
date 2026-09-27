@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "@/utils/jwt";
-import { Employee, IEmployee, Organization, IOrganization } from "@/models";
+import { verifyToken } from "../utils/jwt";
+import { Employee, IEmployee, Organization, IOrganization } from "../models";
 
 export interface AuthRequest extends Request {
   user?: IEmployee | IOrganization | any;

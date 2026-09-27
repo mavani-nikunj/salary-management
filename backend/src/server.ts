@@ -1,12 +1,12 @@
 import "dotenv/config";
 import cluster from "cluster";
 import os from "os";
-import app from "@/app";
+import app from "./app";
 
-import { connectDB } from "@/config/db";
-import { verifySMTP } from "@/utils/mailer";
-import { seedDatabase } from "@/config/seeder";
-import { initCurrencyCron } from "@/cron";
+import { connectDB } from "./config/db";
+import { verifySMTP } from "./utils/mailer";
+import { seedDatabase } from "./config/seeder";
+import { initCurrencyCron } from "./cron";
 
 const PORT = process.env.PORT;
 const numCPUs = os.cpus().length;

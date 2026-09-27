@@ -1,2 +1,2 @@
-export * from "@/swagger";
-export { setupSwagger as default } from "@/swagger";
+export * from "../swagger";
+export { setupSwagger as default } from "../swagger";

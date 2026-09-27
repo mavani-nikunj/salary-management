@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
-import { Country, Currency, Employee } from "@/models";
-import { sendResponse } from "@/utils/response";
+import { Country, Currency, Employee } from "../models";
+import { sendResponse } from "../utils/response";
 
 /**
  * @desc   Get all countries with search, sorting & pagination
