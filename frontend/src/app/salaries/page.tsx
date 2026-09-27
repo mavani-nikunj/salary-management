@@ -135,11 +135,15 @@ export default function SalariesPage() {
 
   const handleOpenCreate = () => {
     setIsEditMode(false);
+    setSelectedRevision(null);
+    const defaultEmp = employeesList[0]?._id ? String(employeesList[0]._id) : "";
+    const defaultCurr = currenciesList[0]?._id ? String(currenciesList[0]._id) : "";
+
     setFormData({
-      employeeId: employeesList[0]?._id || "",
+      employeeId: defaultEmp,
       baseSalary: 50000,
       paySalary: 55000,
-      currencyId: currenciesList[0]?._id || "",
+      currencyId: defaultCurr,
       effectiveDate: new Date().toISOString().split("T")[0],
       remark: "Annual appraisal adjustment",
       sendEmail: false,
@@ -150,8 +154,20 @@ export default function SalariesPage() {
   const handleOpenEdit = (rev: SalaryRevision) => {
     setIsEditMode(true);
     setSelectedRevision(rev);
-    const empId = typeof rev.employeeId === "object" ? rev.employeeId._id : rev.employeeId;
-    const currId = typeof rev.currencyId === "object" ? rev.currencyId._id : rev.currencyId;
+    const empId = rev.employeeId && typeof rev.employeeId === "object"
+      ? String(rev.employeeId._id)
+      : (rev.employeeId ? String(rev.employeeId) : "");
+    const currId = rev.currencyId && typeof rev.currencyId === "object"
+      ? String(rev.currencyId._id)
+      : (rev.currencyId ? String(rev.currencyId) : "");
+
+    // Ensure currency exists in options
+    if (rev.currencyId && typeof rev.currencyId === "object" && (rev.currencyId as any)._id) {
+      const exists = currenciesList.some((c) => String(c._id) === String((rev.currencyId as any)._id));
+      if (!exists) {
+        setCurrenciesList((prev) => [...prev, rev.currencyId as any]);
+      }
+    }
 
     setFormData({
       employeeId: empId,
@@ -250,14 +266,13 @@ export default function SalariesPage() {
               variant="flat"
               startContent={<RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />}
               onPress={fetchSalaries}
-              className="bg-white border border-slate-200 text-slate-700 shadow-xs"
+              className="bg-white border border-slate-200/80 text-slate-700 shadow-xs rounded-xl"
             >
               Refresh
             </Button>
             <Button
               size="sm"
-              color="primary"
-              className="font-semibold shadow-xs"
+              className="font-semibold shadow-md shadow-blue-500/20 bg-[#1890FF] hover:bg-blue-600 text-white rounded-xl"
               startContent={<Plus className="w-4 h-4" />}
               onPress={handleOpenCreate}
             >
@@ -267,7 +282,7 @@ export default function SalariesPage() {
         </div>
 
         {/* Search */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
+        <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs">
           <Input
             size="sm"
             placeholder="Search revision remark or employee name..."
@@ -277,143 +292,241 @@ export default function SalariesPage() {
               setSearch(val);
               setPage(1);
             }}
-            startContent={<Search className="w-4 h-4 text-slate-400" />}
+            startContent={<Search className="w-4 h-4 text-slate-400 shrink-0" />}
             isClearable
             onClear={() => setSearch("")}
-            className="max-w-md"
+            className="w-full sm:max-w-md"
+            classNames={{
+              inputWrapper: "h-10 border-slate-200 hover:border-slate-300 focus-within:!border-blue-500 rounded-xl",
+            }}
           />
         </div>
 
-        {/* Ledger Table */}
-        <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
-          <Table aria-label="Salary Ledger" removeWrapper className="min-w-full">
-            <TableHeader>
-              <TableColumn>EMPLOYEE</TableColumn>
-              <TableColumn>EFFECTIVE DATE</TableColumn>
-              <TableColumn>BASE SALARY</TableColumn>
-              <TableColumn>NET DISBURSED</TableColumn>
-              <TableColumn>REMARK / JUSTIFICATION</TableColumn>
-              <TableColumn align="center">ACTIONS</TableColumn>
-            </TableHeader>
-            <TableBody
-              isLoading={loading}
-              loadingContent={<Spinner size="md" color="primary" />}
-              emptyContent={<div className="p-8 text-center text-slate-500">No revisions recorded.</div>}
-            >
-              {salaries.map((rev) => {
-                const emp = typeof rev.employeeId === "object" ? rev.employeeId : null;
-                const curr = typeof rev.currencyId === "object" ? rev.currencyId?.code : "INR";
+        {/* Mobile View: Revision Cards */}
+        <div className="md:hidden space-y-3">
+          {loading ? (
+            <div className="bg-white p-8 rounded-xl border border-slate-200/80 flex items-center justify-center">
+              <Spinner size="md" color="primary" />
+            </div>
+          ) : salaries.length === 0 ? (
+            <div className="bg-white p-8 rounded-xl border border-slate-200/80 text-center text-slate-500 text-sm">
+              No revisions recorded.
+            </div>
+          ) : (
+            salaries.map((rev) => {
+              const emp = typeof rev.employeeId === "object" ? rev.employeeId : null;
+              const curr = typeof rev.currencyId === "object" ? rev.currencyId?.code : "INR";
 
-                return (
-                  <TableRow key={rev._id} className="hover:bg-slate-50/70 transition-colors">
-                    <TableCell>
-                      <div>
-                        <p className="font-semibold text-slate-800 text-sm">
-                          {emp ? `${emp.firstName} ${emp.lastName}` : "Employee Record"}
-                        </p>
-                        <p className="text-xs text-slate-400 font-mono">
-                          {emp?.employeeCode} • {emp?.email}
-                        </p>
-                      </div>
-                    </TableCell>
+              return (
+                <div key={rev._id} className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="font-semibold text-slate-900 text-sm">
+                        {emp ? `${emp.firstName} ${emp.lastName}` : "Employee Record"}
+                      </p>
+                      <p className="text-[11px] text-slate-400 font-mono">
+                        {emp?.employeeCode} • {rev.effectiveDate ? new Date(rev.effectiveDate).toLocaleDateString() : "N/A"}
+                      </p>
+                    </div>
+                    <span className="font-bold text-indigo-600 text-sm">
+                      {curr} {Number(rev.paySalary).toLocaleString()}
+                    </span>
+                  </div>
 
-                    <TableCell className="font-mono text-xs text-slate-600">
-                      {rev.effectiveDate ? new Date(rev.effectiveDate).toLocaleDateString() : "N/A"}
-                    </TableCell>
-
-                    <TableCell className="text-xs font-medium text-slate-600">
+                  <div className="bg-slate-50/80 p-2.5 rounded-lg border border-slate-100 text-xs">
+                    <p className="text-[10px] text-slate-400 font-medium">Base Salary</p>
+                    <p className="font-semibold text-slate-700">
                       {curr} {Number(rev.baseSalary).toLocaleString()}
-                    </TableCell>
+                    </p>
+                    {rev.remark && (
+                      <p className="text-[11px] text-slate-500 mt-1 italic">
+                        "{rev.remark}"
+                      </p>
+                    )}
+                  </div>
 
-                    <TableCell>
-                      <span className="font-bold text-indigo-600 text-sm">
-                        {curr} {Number(rev.paySalary).toLocaleString()}
-                      </span>
-                    </TableCell>
+                  <div className="flex items-center justify-end gap-2 pt-1 border-t border-slate-100">
+                    <a
+                      href={`${BASE_URL}/api/salaries/${rev._id}/pdf`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold"
+                    >
+                      <Download className="w-3.5 h-3.5" /> PDF
+                    </a>
+                    <Button
+                      isIconOnly
+                      size="sm"
+                      variant="light"
+                      className="text-slate-600 hover:text-indigo-600 rounded-lg h-8 w-8"
+                      onPress={() => handleSendEmail(rev._id)}
+                      title="Email Slip"
+                    >
+                      <Mail className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      isIconOnly
+                      size="sm"
+                      variant="light"
+                      className="text-slate-600 hover:text-emerald-600 rounded-lg h-8 w-8"
+                      onPress={() => handleOpenEdit(rev)}
+                      title="Edit"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      isIconOnly
+                      size="sm"
+                      variant="light"
+                      className="text-slate-600 hover:text-rose-600 rounded-lg h-8 w-8"
+                      onPress={() => {
+                        setSelectedRevision(rev);
+                        onOpenDelete();
+                      }}
+                      title="Delete"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
 
-                    <TableCell className="text-xs text-slate-500 max-w-xs truncate">
-                      {rev.remark || "Regular salary increment"}
-                    </TableCell>
+        {/* Desktop Table View */}
+        <div className="hidden md:block bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table aria-label="Salary Ledger" removeWrapper className="min-w-full">
+              <TableHeader>
+                <TableColumn>EMPLOYEE</TableColumn>
+                <TableColumn>EFFECTIVE DATE</TableColumn>
+                <TableColumn>BASE SALARY</TableColumn>
+                <TableColumn>NET DISBURSED</TableColumn>
+                <TableColumn>REMARK / JUSTIFICATION</TableColumn>
+                <TableColumn align="center">ACTIONS</TableColumn>
+              </TableHeader>
+              <TableBody
+                isLoading={loading}
+                loadingContent={<Spinner size="md" color="primary" />}
+                emptyContent={<div className="p-8 text-center text-slate-500">No revisions recorded.</div>}
+              >
+                {salaries.map((rev) => {
+                  const emp = typeof rev.employeeId === "object" ? rev.employeeId : null;
+                  const curr = typeof rev.currencyId === "object" ? rev.currencyId?.code : "INR";
 
-                    <TableCell>
-                      <div className="flex items-center justify-center gap-2">
-                        {/* Download Official PDF */}
-                        <a
-                          href={`${BASE_URL}/api/salaries/${rev._id}/pdf`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold transition-colors"
-                          title="Download Formatted PDF Payslip"
-                        >
-                          <Download className="w-3.5 h-3.5" /> PDF
-                        </a>
+                  return (
+                    <TableRow key={rev._id} className="hover:bg-slate-50/70 transition-colors">
+                      <TableCell>
+                        <div>
+                          <p className="font-semibold text-slate-800 text-sm">
+                            {emp ? `${emp.firstName} ${emp.lastName}` : "Employee Record"}
+                          </p>
+                          <p className="text-xs text-slate-400 font-mono">
+                            {emp?.employeeCode} • {emp?.email}
+                          </p>
+                        </div>
+                      </TableCell>
 
-                        {/* Dispatch Email */}
-                        <Button
-                          isIconOnly
-                          size="sm"
-                          variant="light"
-                          className="text-slate-600 hover:text-indigo-600"
-                          title="Email Salary Slip"
-                          onPress={() => handleSendEmail(rev._id)}
-                        >
-                          <Mail className="w-4 h-4" />
-                        </Button>
+                      <TableCell className="font-mono text-xs text-slate-600">
+                        {rev.effectiveDate ? new Date(rev.effectiveDate).toLocaleDateString() : "N/A"}
+                      </TableCell>
 
-                        {/* Edit */}
-                        <Button
-                          isIconOnly
-                          size="sm"
-                          variant="light"
-                          className="text-slate-600 hover:text-emerald-600"
-                          title="Edit Revision"
-                          onPress={() => handleOpenEdit(rev)}
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
+                      <TableCell className="text-xs font-medium text-slate-600">
+                        {curr} {Number(rev.baseSalary).toLocaleString()}
+                      </TableCell>
 
-                        {/* Delete */}
-                        <Button
-                          isIconOnly
-                          size="sm"
-                          variant="light"
-                          className="text-slate-600 hover:text-rose-600"
-                          title="Delete Revision"
-                          onPress={() => {
-                            setSelectedRevision(rev);
-                            onOpenDelete();
-                          }}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+                      <TableCell>
+                        <span className="font-bold text-indigo-600 text-sm">
+                          {curr} {Number(rev.paySalary).toLocaleString()}
+                        </span>
+                      </TableCell>
 
-          {/* Pagination */}
-          <div className="flex flex-col sm:flex-row items-center justify-between p-4 border-t border-slate-200 text-xs text-slate-500 gap-3">
-            <span>
-              Showing {salaries.length} of {total.toLocaleString()} records (Page {page} of {totalPages})
-            </span>
-            <Pagination
-              page={page}
-              total={totalPages}
-              onChange={(newPage) => setPage(newPage)}
-              showControls
-              color="primary"
-              size="sm"
-            />
+                      <TableCell className="text-xs text-slate-500 max-w-xs truncate">
+                        {rev.remark || "Regular salary increment"}
+                      </TableCell>
+
+                      <TableCell>
+                        <div className="flex items-center justify-center gap-2">
+                          {/* Download Official PDF */}
+                          <a
+                            href={`${BASE_URL}/api/salaries/${rev._id}/pdf`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold transition-colors"
+                            title="Download Formatted PDF Payslip"
+                          >
+                            <Download className="w-3.5 h-3.5" /> PDF
+                          </a>
+
+                          {/* Dispatch Email */}
+                          <Button
+                            isIconOnly
+                            size="sm"
+                            variant="light"
+                            className="text-slate-600 hover:text-indigo-600 rounded-lg"
+                            title="Email Salary Slip"
+                            onPress={() => handleSendEmail(rev._id)}
+                          >
+                            <Mail className="w-4 h-4" />
+                          </Button>
+
+                          {/* Edit */}
+                          <Button
+                            isIconOnly
+                            size="sm"
+                            variant="light"
+                            className="text-slate-600 hover:text-emerald-600 rounded-lg"
+                            title="Edit Revision"
+                            onPress={() => handleOpenEdit(rev)}
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+
+                          {/* Delete */}
+                          <Button
+                            isIconOnly
+                            size="sm"
+                            variant="light"
+                            className="text-slate-600 hover:text-rose-600 rounded-lg"
+                            title="Delete Revision"
+                            onPress={() => {
+                              setSelectedRevision(rev);
+                              onOpenDelete();
+                            }}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </div>
+        </div>
+
+        {/* Pagination Card (Shared) */}
+        <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
+          <span>
+            Showing {salaries.length} of {total.toLocaleString()} records (Page {page} of {totalPages})
+          </span>
+          <Pagination
+            page={page}
+            total={totalPages}
+            onChange={(newPage) => setPage(newPage)}
+            showControls
+            color="primary"
+            size="sm"
+            className="overflow-x-auto max-w-full"
+          />
         </div>
       </div>
 
       {/* Log / Edit Revision Modal */}
       <Modal isOpen={isCreateOpen} onOpenChange={onOpenCreateChange} size="lg">
-        <ModalContent>
+        <ModalContent className="rounded-2xl">
           <ModalHeader className="flex items-center gap-2">
             <Banknote className="w-5 h-5 text-indigo-600" />
             <span>{isEditMode ? "Modify Revision Record" : "Record New Salary Adjustment"}</span>
@@ -422,12 +535,15 @@ export default function SalariesPage() {
             <Select
               label="Select Employee *"
               variant="bordered"
-              selectedKeys={formData.employeeId ? [formData.employeeId] : []}
-              onChange={(e) => setFormData({ ...formData, employeeId: e.target.value })}
+              selectedKeys={formData.employeeId ? [String(formData.employeeId)] : []}
+              onSelectionChange={(keys) => {
+                const val = Array.from(keys)[0] as string;
+                if (val) setFormData((prev) => ({ ...prev, employeeId: val }));
+              }}
               isDisabled={isEditMode}
             >
               {employeesList.map((emp) => (
-                <SelectItem key={emp._id} textValue={`${emp.firstName} ${emp.lastName} (${emp.employeeCode})`}>
+                <SelectItem key={String(emp._id)} textValue={`${emp.firstName} ${emp.lastName} (${emp.employeeCode})`}>
                   {emp.firstName} {emp.lastName} — {emp.employeeCode}
                 </SelectItem>
               ))}
@@ -454,11 +570,16 @@ export default function SalariesPage() {
               <Select
                 label="Currency *"
                 variant="bordered"
-                selectedKeys={formData.currencyId ? [formData.currencyId] : []}
-                onChange={(e) => setFormData({ ...formData, currencyId: e.target.value })}
+                selectedKeys={formData.currencyId ? [String(formData.currencyId)] : []}
+                onSelectionChange={(keys) => {
+                  const val = Array.from(keys)[0] as string;
+                  if (val) setFormData((prev) => ({ ...prev, currencyId: val }));
+                }}
               >
                 {currenciesList.map((c) => (
-                  <SelectItem key={c._id}>{c.code} - {c.name}</SelectItem>
+                  <SelectItem key={String(c._id)} textValue={`${c.code} - ${c.name}`}>
+                    {c.code} - {c.name}
+                  </SelectItem>
                 ))}
               </Select>
 

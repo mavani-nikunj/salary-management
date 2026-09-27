@@ -170,14 +170,13 @@ export default function DepartmentsPage() {
               variant="flat"
               startContent={<RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />}
               onPress={fetchDepartments}
-              className="bg-white border border-slate-200 text-slate-700 shadow-xs"
+              className="bg-white border border-slate-200/80 text-slate-700 shadow-xs rounded-xl"
             >
               Refresh
             </Button>
             <Button
               size="sm"
-              color="primary"
-              className="font-semibold shadow-xs"
+              className="font-semibold shadow-md shadow-blue-500/20 bg-[#1890FF] hover:bg-blue-600 text-white rounded-xl"
               startContent={<Plus className="w-4 h-4" />}
               onPress={handleOpenCreate}
             >
@@ -187,17 +186,20 @@ export default function DepartmentsPage() {
         </div>
 
         {/* Search */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
+        <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs">
           <Input
             size="sm"
             placeholder="Search departments..."
             variant="bordered"
             value={search}
             onValueChange={setSearch}
-            startContent={<Search className="w-4 h-4 text-slate-400" />}
+            startContent={<Search className="w-4 h-4 text-slate-400 shrink-0" />}
             isClearable
             onClear={() => setSearch("")}
-            className="max-w-md"
+            className="w-full sm:max-w-md"
+            classNames={{
+              inputWrapper: "h-10 border-slate-200 hover:border-slate-300 focus-within:!border-blue-500 rounded-xl",
+            }}
           />
         </div>
 
@@ -209,11 +211,11 @@ export default function DepartmentsPage() {
         ) : departments.length === 0 ? (
           <div className="text-center py-12 text-slate-500">No departments found.</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {departments.map((dept) => (
               <Card
                 key={dept._id}
-                className="border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow"
+                className="border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow rounded-xl"
               >
                 <CardHeader className="flex justify-between items-start p-5 pb-2">
                   <div className="flex items-center gap-3">

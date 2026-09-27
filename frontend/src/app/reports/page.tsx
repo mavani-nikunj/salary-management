@@ -153,14 +153,14 @@ export default function ReportsPage() {
             variant="flat"
             startContent={<RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />}
             onPress={fetchReports}
-            className="bg-white border border-slate-200 text-slate-700 shadow-xs"
+            className="bg-white border border-slate-200/80 text-slate-700 shadow-xs rounded-xl"
           >
             Refresh
           </Button>
         </div>
 
         {/* Export Configuration Card */}
-        <Card className="border border-slate-200/80 shadow-xs">
+        <Card className="bg-white rounded-2xl border border-slate-100 shadow-xs">
           <CardHeader className="px-6 pt-5 pb-2">
             <div className="flex items-center gap-2">
               <FileSpreadsheet className="w-5 h-5 text-indigo-600" />
@@ -179,11 +179,14 @@ export default function ReportsPage() {
                 size="sm"
                 label="Department Scope"
                 variant="bordered"
-                selectedKeys={exportDept ? [exportDept] : []}
-                onChange={(e) => setExportDept(e.target.value)}
+                selectedKeys={exportDept ? [String(exportDept)] : []}
+                onSelectionChange={(keys) => {
+                  const val = Array.from(keys)[0] as string;
+                  setExportDept(val || "");
+                }}
               >
                 {departments.map((d) => (
-                  <SelectItem key={d._id}>{d.name}</SelectItem>
+                  <SelectItem key={String(d._id)} textValue={d.name}>{d.name}</SelectItem>
                 ))}
               </Select>
 
@@ -191,11 +194,16 @@ export default function ReportsPage() {
                 size="sm"
                 label="Country Scope"
                 variant="bordered"
-                selectedKeys={exportCountry ? [exportCountry] : []}
-                onChange={(e) => setExportCountry(e.target.value)}
+                selectedKeys={exportCountry ? [String(exportCountry)] : []}
+                onSelectionChange={(keys) => {
+                  const val = Array.from(keys)[0] as string;
+                  setExportCountry(val || "");
+                }}
               >
                 {countries.map((c) => (
-                  <SelectItem key={c._id}>{c.name} ({c.code})</SelectItem>
+                  <SelectItem key={String(c._id)} textValue={`${c.name} (${c.code})`}>
+                    {c.name} ({c.code})
+                  </SelectItem>
                 ))}
               </Select>
 
@@ -204,11 +212,14 @@ export default function ReportsPage() {
                 label="Status Scope"
                 variant="bordered"
                 selectedKeys={[exportStatus]}
-                onChange={(e) => setExportStatus(e.target.value)}
+                onSelectionChange={(keys) => {
+                  const val = Array.from(keys)[0] as string;
+                  if (val) setExportStatus(val);
+                }}
               >
-                <SelectItem key="Active">Active Only</SelectItem>
-                <SelectItem key="Inactive">Inactive Only</SelectItem>
-                <SelectItem key="All">All Personnel</SelectItem>
+                <SelectItem key="Active" textValue="Active Only">Active Only</SelectItem>
+                <SelectItem key="Inactive" textValue="Inactive Only">Inactive Only</SelectItem>
+                <SelectItem key="All" textValue="All Personnel">All Personnel</SelectItem>
               </Select>
             </div>
 
