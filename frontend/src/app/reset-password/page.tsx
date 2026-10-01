@@ -4,7 +4,7 @@ import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm, Controller } from "react-hook-form";
-import { Card, CardBody, CardHeader, Button, Input } from "@heroui/react";
+import { Card, CardBody, Button, Input } from "@heroui/react";
 import {
   Lock,
   Eye,
@@ -91,26 +91,16 @@ function ResetPasswordForm() {
           <KeyRound className="w-7 h-7" />
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-          Create New Password
+          Reset Password
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto">
-          Choose a strong password with at least 6 characters to secure your
-          account.
+          Choose a strong password with at least 6 characters to secure your account.
         </p>
       </div>
 
       {/* Main Card */}
       <Card className="border border-slate-200 bg-white/95 shadow-xl shadow-slate-200/70 rounded-2xl">
-        <CardHeader className="flex flex-col items-start px-6 pt-6 pb-2">
-          <h2 className="text-base sm:text-lg font-bold text-slate-900">
-            Set New Credentials
-          </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Your session token will be updated across devices
-          </p>
-        </CardHeader>
-
-        <CardBody className="px-6 py-4 space-y-5">
+        <CardBody className="p-6 sm:p-7 space-y-5">
           {/* Missing Token Warning */}
           {!token && (
             <div className="flex items-start gap-2.5 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs">
@@ -158,6 +148,7 @@ function ResetPasswordForm() {
                 radius="lg"
                 fullWidth
                 endContent={<ArrowRight className="w-4 h-4" />}
+                className="font-semibold shadow-md shadow-blue-600/25"
               >
                 Proceed to Sign In
               </Button>
@@ -169,7 +160,10 @@ function ResetPasswordForm() {
               className="space-y-4"
               noValidate
             >
-              <div className="space-y-10">
+              <div className="space-y-1">
+                <span className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                  New Password
+                </span>
                 <Controller
                   name="newPassword"
                   control={control}
@@ -184,8 +178,6 @@ function ResetPasswordForm() {
                     <Input
                       {...field}
                       value={field.value || ""}
-                      label="New Password"
-                      labelPlacement="outside"
                       placeholder="Minimum 6 characters"
                       type={isVisible ? "text" : "password"}
                       variant="bordered"
@@ -212,7 +204,12 @@ function ResetPasswordForm() {
                     />
                   )}
                 />
+              </div>
 
+              <div className="space-y-1">
+                <span className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                  Confirm New Password
+                </span>
                 <Controller
                   name="confirmPassword"
                   control={control}
@@ -226,8 +223,6 @@ function ResetPasswordForm() {
                     <Input
                       {...field}
                       value={field.value || ""}
-                      label="Confirm New Password"
-                      labelPlacement="outside"
                       placeholder="Repeat new password"
                       type={isConfirmVisible ? "text" : "password"}
                       variant="bordered"
@@ -272,15 +267,17 @@ function ResetPasswordForm() {
           )}
 
           {/* Back to Login */}
-          <div className="pt-2 text-center">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Return to Login</span>
-            </Link>
-          </div>
+          {!isSuccess && (
+            <div className="pt-2 text-center">
+              <Link
+                href="/"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Return to Login</span>
+              </Link>
+            </div>
+          )}
         </CardBody>
       </Card>
 

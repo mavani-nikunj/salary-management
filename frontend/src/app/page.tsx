@@ -127,35 +127,38 @@ function LoginForm() {
               className="space-y-4"
               noValidate
             >
-              <Controller
-                name="email"
-                control={control}
-                rules={{
-                  required: "Work email is required",
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Please enter a valid email address",
-                  },
-                }}
-                render={({ field, fieldState: { error } }) => (
-                  <Input
-                    {...field}
-                    value={field.value || ""}
-                    label="Work Email"
-                    labelPlacement="outside"
-                    placeholder="name@company.com"
-                    type="email"
-                    variant="bordered"
-                    size="md"
-                    radius="lg"
-                    isInvalid={!!error}
-                    errorMessage={error?.message}
-                    startContent={
-                      <Mail className="w-4 h-4 text-default-400 pointer-events-none shrink-0" />
-                    }
-                  />
-                )}
-              />
+              <div className="space-y-1">
+                <span className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                  Work Email
+                </span>
+                <Controller
+                  name="email"
+                  control={control}
+                  rules={{
+                    required: "Work email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Please enter a valid email address",
+                    },
+                  }}
+                  render={({ field, fieldState: { error } }) => (
+                    <Input
+                      {...field}
+                      value={field.value || ""}
+                      placeholder="name@company.com"
+                      type="email"
+                      variant="bordered"
+                      size="md"
+                      radius="lg"
+                      isInvalid={!!error}
+                      errorMessage={error?.message}
+                      startContent={
+                        <Mail className="w-4 h-4 text-default-400 pointer-events-none shrink-0" />
+                      }
+                    />
+                  )}
+                />
+              </div>
 
               <div className="space-y-1">
                 <div className="flex items-center justify-between">

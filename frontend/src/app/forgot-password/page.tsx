@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useForm, Controller } from "react-hook-form";
-import { Card, CardBody, CardHeader, Button, Input } from "@heroui/react";
+import { Card, CardBody, Button, Input } from "@heroui/react";
 import {
   Mail,
   ArrowRight,
@@ -91,26 +91,16 @@ export default function ForgotPasswordPage() {
             <KeyRound className="w-7 h-7" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-            Reset Password
+            Forgot Password
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto">
-            Enter your registered work email and we&apos;ll send you
-            instructions to reset your account credentials.
+            Enter your registered work email to receive password reset instructions.
           </p>
         </div>
 
         {/* Main Card */}
         <Card className="border border-slate-200 bg-white/95 shadow-xl shadow-slate-200/70 rounded-2xl">
-          <CardHeader className="flex flex-col items-start px-6 pt-6 pb-2">
-            <h2 className="text-base sm:text-lg font-bold text-slate-900">
-              Forgot Your Password?
-            </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Secure reset link will expire in 1 hour
-            </p>
-          </CardHeader>
-
-          <CardBody className="px-6 py-4 space-y-5">
+          <CardBody className="p-6 sm:p-7 space-y-5">
             {/* Server Error Alert */}
             {serverError && (
               <div className="flex items-start gap-2.5 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs">
@@ -162,35 +152,38 @@ export default function ForgotPasswordPage() {
               className="space-y-4"
               noValidate
             >
-              <Controller
-                name="email"
-                control={control}
-                rules={{
-                  required: "Work email is required",
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Please enter a valid email address",
-                  },
-                }}
-                render={({ field, fieldState: { error } }) => (
-                  <Input
-                    {...field}
-                    value={field.value || ""}
-                    label="Work Email Address"
-                    labelPlacement="outside"
-                    placeholder="name@company.com"
-                    type="email"
-                    variant="bordered"
-                    size="md"
-                    radius="lg"
-                    isInvalid={!!error}
-                    errorMessage={error?.message}
-                    startContent={
-                      <Mail className="w-4 h-4 text-default-400 pointer-events-none shrink-0" />
-                    }
-                  />
-                )}
-              />
+              <div className="space-y-1">
+                <span className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                  Work Email
+                </span>
+                <Controller
+                  name="email"
+                  control={control}
+                  rules={{
+                    required: "Work email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Please enter a valid email address",
+                    },
+                  }}
+                  render={({ field, fieldState: { error } }) => (
+                    <Input
+                      {...field}
+                      value={field.value || ""}
+                      placeholder="name@company.com"
+                      type="email"
+                      variant="bordered"
+                      size="md"
+                      radius="lg"
+                      isInvalid={!!error}
+                      errorMessage={error?.message}
+                      startContent={
+                        <Mail className="w-4 h-4 text-default-400 pointer-events-none shrink-0" />
+                      }
+                    />
+                  )}
+                />
+              </div>
 
               <Button
                 type="submit"
@@ -206,19 +199,19 @@ export default function ForgotPasswordPage() {
               </Button>
             </form>
 
-            {/* Quick autofill helper */}
-            <div className="pt-4 border-t border-slate-100 space-y-2">
+            {/* Quick autofill HR account */}
+            <div className="pt-4 border-t border-slate-100 space-y-2.5">
               <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                <span>Test Account:</span>
+                <span>Quick Fill HR Account:</span>
               </div>
               <button
                 type="button"
                 onClick={handleQuickFillHR}
-                className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200 hover:border-blue-300 text-left transition-all text-xs cursor-pointer group"
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200 hover:border-blue-300 text-left transition-all cursor-pointer group"
               >
                 <div>
-                  <div className="font-semibold text-slate-800 group-hover:text-blue-700">
+                  <div className="text-xs font-semibold text-slate-800 group-hover:text-blue-700">
                     HR Manager
                   </div>
                   <div className="text-[11px] text-slate-500 truncate">
